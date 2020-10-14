@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>radio-slider</title>
+  <style>
+    body {
+      margin: 0;
+    }
+    section {
+      position: relative;
+    }
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 590px;
+      height: 470px;
+      border: 2px solid;
+      opacity: 0;
+    }
+    
+    input:checked + * + * + * + * + * + * + img {
+      opacity: 1;
+      transition: 1s;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <input type="radio" checked name="slider" id="">
+    <input type="radio" name="slider" id="">
+    <input type="radio" name="slider" id="">
+    <input type="radio" name="slider" id="">
+    <input type="radio" name="slider" id="">
+    <input type="radio" name="slider" id="">
+    <input type="radio" name="slider" id="">
+    <img src="https://img13.360buyimg.com/babel/s590x470_jfs/t1/121171/1/13998/79761/5f7435b8E7e1ba3f0/58b69a68c4bb04bc.jpg.webp" alt="">
+    <img src="https://img12.360buyimg.com/pop/s590x470_jfs/t1/149454/36/9251/92742/5f6e8c4bEcad4b377/15ca2e425a024a29.jpg.webp" alt="">
+    <img src="https://img11.360buyimg.com/pop/s590x470_jfs/t1/26587/26/9798/97535/5c7f6a96E2f5e5d07/464e6792954e8f88.jpg.webp" alt="">
+    <img src="https://imgcps.jd.com/ling4/100008348542/5Lqs6YCJ5aW96LSn/5L2g5YC85b6X5oul5pyJ/p-5bd8253082acdd181d02fa06/2423bc99/cr/s/q.jpg" alt="">
+    <img src="https://img11.360buyimg.com/pop/s590x470_jfs/t1/94450/1/4842/98647/5de8ec80E551e8333/f8b2db6f163a876c.jpg.webp" alt="">
+    <img src="https://img10.360buyimg.com/pop/s590x470_jfs/t1/139982/12/10398/66704/5f80193dE57b271a3/87461d06d50ea019.jpg.webp" alt="">
+    <img src="https://img30.360buyimg.com/pop/s590x470_jfs/t1/126451/15/12260/86499/5f59ffb7E1cad4379/c8b965c5cceff37f.jpg.webp" alt="">
+  </section>
+</body>
+</html>

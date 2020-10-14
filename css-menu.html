@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>css-menu</title>
+  <style>
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      height: 20px;
+      line-height: 20px;
+    }
+
+    .menu {
+      width: 420px;  
+      color: white;
+      background-color: rgb(60, 60, 60);
+    }
+
+    .menu > li {
+      display: inline-block;
+      width: 100px;
+      vertical-align: top;
+    }
+
+    ul ul {
+      display: none;
+      background-color: rgb(37, 37, 38);
+    }
+
+    li:hover > ul {
+      display: block;
+    }
+
+    li:hover {
+      position: relative;
+      background-color: rgb(9, 71, 113);
+    }
+
+    li li:hover ul {
+      position: absolute;
+      left: 100px;
+      top: 0;
+    }
+
+  </style>
+</head>
+<body>
+  <ul class="menu">
+    <li>
+      文件(F)
+      <ul>
+        <li>新建文件
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>新建窗口
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>打开文件
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>打开文件夹
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>打开工作区
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      编辑(E)
+      <ul>
+        <li>撤销
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>恢复
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>剪切
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>复制
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>粘贴
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      选择(S)
+      <ul>
+        <li>全选
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>展开内容
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      查看(V)
+      <ul>
+        <li>命令板
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>打开视图
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+        <li>外观
+          <ul>
+            <li>001</li>
+            <li>002</li>
+            <li>003</li>
+            <li>004</li>
+            <li>005</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</body>
+</html>
