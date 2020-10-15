@@ -6,31 +6,38 @@
   <title>css-menu</title>
   <style>
     ul {
-      list-style: none;
+      list-style-type: none;
       padding: 0;
       margin: 0;
     }
 
     li {
-      height: 20px;
-      line-height: 20px;
+      position: relative;
+      padding: 2px 8px;
+      white-space: nowrap;
     }
 
     .menu {
-      width: 420px;  
       color: white;
       background-color: rgb(60, 60, 60);
     }
 
     .menu > li {
       display: inline-block;
-      width: 100px;
-      vertical-align: top;
     }
 
     ul ul {
+      position: absolute;
+      top: 100%;
+      left: 0;
       display: none;
       background-color: rgb(37, 37, 38);
+    }
+
+    ul ul ul {
+      position: absolute;
+      top: 0;
+      left: 100%;
     }
 
     li:hover > ul {
@@ -38,14 +45,7 @@
     }
 
     li:hover {
-      position: relative;
       background-color: rgb(9, 71, 113);
-    }
-
-    li li:hover ul {
-      position: absolute;
-      left: 100px;
-      top: 0;
     }
 
   </style>

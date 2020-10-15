@@ -10,26 +10,27 @@
     }
 
     div.inline-block-center-1 {
-      height: 400px;
+      height: 300px;
       width: 400px;
       margin: 20px auto;
+      line-height: 300px;
       text-align: center;
-      line-height: 400px;
       font-size: 0;
     }
 
     div.inline-block-center-1 span {
       display: inline-block;
-      width: 200px;
+      width: 300px;
       height: 200px;
       vertical-align: middle;
       line-height: normal;
       font-size: 16px;
+      text-align: left;
     }
 
     div.inline-block-center-2 {
       width: 400px;
-      height: 400px;
+      height: 300px;
       margin: 20px auto;
       text-align: center;
       font-size: 0;
@@ -37,10 +38,11 @@
 
     div.inline-block-center-2 span {
       display: inline-block;
-      width: 200px;
+      width: 300px;
       height: 200px;
       vertical-align: middle;
       font-size: 16px;
+      text-align: left;
     }
 
     div em {
@@ -54,11 +56,12 @@
     div.abs-center {
       position: relative;
       height: 400px;
+      margin: 20px auto;
     }
 
     div.abs-center span {
       position: absolute;
-      width: 200px;
+      width: 400px;
       height: 50%;
       top: 0;
       bottom: 0;
@@ -67,21 +70,40 @@
       margin: auto;
     }
 
+    table {
+      margin:auto;
+    }
+
+    td {
+      width: 400px;
+      height: 300px;
+    }
+
+    td div {
+      width: 90%;
+      margin: auto;
+    }
   </style>
 </head>
 <body>
   <div class="inline-block-center-1">
-    <span></span>
+    <span>行内</span>
   </div>
 
   <div class="inline-block-center-2">
     <em></em>
-    <span></span>
+    <span>行内</span>
   </div>
   
   <div class="abs-center">
-    <span></span>
+    <span>定位</span>
   </div>
 
+  <table>
+    <td>
+      <div>表</div>
+    </td>
+  </table>
+  
 </body>
 </html>
