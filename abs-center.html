@@ -9,28 +9,33 @@
       box-shadow: 0 0 3px red;
     }
 
+    body {
+      box-shadow: 0 0 0;
+    }
+
+    /* 行内方法一： */
     div.inline-block-center-1 {
-      height: 300px;
       width: 400px;
+      height: 300px;/*这里修改*/
       margin: 20px auto;
-      line-height: 300px;
       text-align: center;
+      line-height: 300px;/*这里也要修改*/
       font-size: 0;
     }
 
     div.inline-block-center-1 span {
       display: inline-block;
       width: 300px;
-      height: 200px;
       vertical-align: middle;
       line-height: normal;
       font-size: 16px;
       text-align: left;
     }
 
+    /* 行内方法二： */
     div.inline-block-center-2 {
       width: 400px;
-      height: 300px;
+      height: 300px;/*可以只改这里*/
       margin: 20px auto;
       text-align: center;
       font-size: 0;
@@ -39,7 +44,6 @@
     div.inline-block-center-2 span {
       display: inline-block;
       width: 300px;
-      height: 200px;
       vertical-align: middle;
       font-size: 16px;
       text-align: left;
@@ -49,20 +53,20 @@
       display: inline-block;
       height: 100%;
       vertical-align: middle;
-      /* width: 0; */
-      /* text-indent: -999px; */
     }
 
+    /* 定位 */
     div.abs-center {
       position: relative;
-      height: 400px;
+      width: 400px;
+      height: 300px;
       margin: 20px auto;
     }
 
     div.abs-center span {
       position: absolute;
-      width: 400px;
-      height: 50%;
+      width: 300px;
+      height: 50%;/*定高*/
       top: 0;
       bottom: 0;
       left: 0;
@@ -70,40 +74,45 @@
       margin: auto;
     }
 
-    table {
-      margin:auto;
-    }
-
-    td {
+    /* 表格 */
+    section {
+      display: table-cell;
       width: 400px;
       height: 300px;
+      vertical-align: middle;
     }
 
-    td div {
-      width: 90%;
+    section div {
+      width: 75%;
       margin: auto;
+    }
+
+    .table-center {
+      width: 400px;
+      height: 300px;
+      margin: 20px auto;
     }
   </style>
 </head>
 <body>
   <div class="inline-block-center-1">
-    <span>行内</span>
+    <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ducimus ut sunt quas perferendis laboriosam pariatur magni, debitis quibusdam itaque nemo totam repellat fuga odit tenetur dolorum provident a magnam veritatis.</span>
   </div>
 
   <div class="inline-block-center-2">
     <em></em>
-    <span>行内</span>
+    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus necessitatibus consectetur cum nulla ipsa molestias voluptatibus? Necessitatibus libero minima debitis! Veniam rerum ullam autem, consequatur nemo ducimus nesciunt quos iusto.</span>
   </div>
   
   <div class="abs-center">
-    <span>定位</span>
+    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum, quas, assumenda perspiciatis quia, magnam aspernatur earum nemo quos animi ullam nam! Tempora nulla debitis eaque repellendus pariatur numquam excepturi expedita!</span>
   </div>
 
-  <table>
-    <td>
-      <div>表</div>
-    </td>
-  </table>
+  <div class="table-center">
+    <section>
+      <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis omnis cumque qui laborum odio culpa esse totam ad inventore quisquam. Magnam voluptatem hic ex placeat adipisci necessitatibus alias at vitae.</div>
+    </section>
+  </div>
   
 </body>
 </html>
