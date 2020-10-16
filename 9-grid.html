@@ -9,7 +9,6 @@
     ul.inline {
       display: inline-block;
       width: 170px;
-      height: 170px;
       list-style-type: none;
       padding: 0;
       font-size: 0;
@@ -25,9 +24,6 @@
       text-align: center;
       line-height: 50px;
     }
-    ul.line li span {
-      vertical-align: middle;
-    }
 
     ul.inline li:not(:nth-child(3n+1)) {
       margin-left: -5px;
@@ -38,20 +34,10 @@
     }
 
     ul.inline li:hover {
-      /* position: relative; */
+      position: relative;
       border: 5px solid red;
-      /* z-index: 8px; */
+      z-index: 8px;
       cursor: pointer;
-    }
-
-    ul.inline li:hover + li:not(:nth-child(4)):not(:nth-child(7)){
-      border-left-style: none;
-      margin-left: 0px;
-    }
-
-    ul.inline li:hover + * + * + li{
-      border-top-style: none;
-      margin-top: 0px;
     }
 
     /* 定位 */
@@ -70,19 +56,8 @@
       width: 50px;
       height: 50px;
       border: 5px solid blue;
-    }
-  
-    ul.position li span {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      height: 1em;
-      margin: auto;
-      left: 0;
-      right: 0;
-      width: 1em;
-      line-height: 1em;
       text-align: center;
+      line-height: 50px;
     }
   
     ul.position li:nth-child(2) {
@@ -130,18 +105,18 @@
     /* 表格 */
     table {
       border-collapse: collapse;
-      border: 5px solid blue;
       display: inline-table;
       vertical-align: top;
     }
 
-    td {
+    tr,col {
       border: 5px solid blue;
+    }
+
+    td {
       width: 50px;
       height: 50px;
       text-align: center;
-      border-right-style: none;
-      border-bottom-style: none;
       padding: 0;
     }
 
@@ -154,30 +129,33 @@
 </head>
 <body>
   <ul class="inline">
-    <li><span>1</span></li>
-    <li><span>2</span></li>
-    <li><span>3</span></li>
-    <li><span>4</span></li>
-    <li><span>5</span></li>
-    <li><span>6</span></li>
-    <li><span>7</span></li>
-    <li><span>8</span></li>
-    <li><span>9</span></li>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
   </ul>
   
   <ul class="position">
-    <li><span>1</span></li>
-    <li><span>2</span></li>
-    <li><span>3</span></li>
-    <li><span>4</span></li>
-    <li><span>5</span></li>
-    <li><span>6</span></li>
-    <li><span>7</span></li>
-    <li><span>8</span></li>
-    <li><span>9</span></li>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+    <li>7</li>
+    <li>8</li>
+    <li>9</li>
   </ul>
 
   <table>
+    <col>
+    <col>
+    <col>
     <tbody>
       <tr>
         <td>1</td>
