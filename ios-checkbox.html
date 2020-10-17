@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ios-checkbox</title>
+  <style>
+    @keyframes expand {
+      0% {padding-left: 0;}
+      50% {padding-left: 27px;}
+      100% {padding-left: 0;}
+    }
+
+    input {
+      display: none;
+    }
+
+    label {
+      position: relative;
+      display: inline-block;
+      box-sizing: border-box;
+      height: 156px;
+      width: 270px;
+      border: 3px solid rgb(203, 199, 202);
+      border-radius: 100px;
+      background-color: rgb(48, 243, 77);
+      transition: 1s;
+    }
+
+    div {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      height: 100%;
+      width: 100%;
+      border-radius: 100px;
+      background-color: white;
+      transition: ease-in-out .7s;
+    }
+
+    span {
+      position: absolute;
+      width: 133px;
+      height: 133px;
+      box-shadow: 0 5px 20px 5px rgb(186, 186, 182);
+      border-radius: 100px;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      margin-left: 6px;
+      background-color: white;
+      transition: margin-left 1s;
+    }
+
+    input:checked + label {
+      border-color:rgb(48, 243, 77);
+    }
+
+    input:checked + label div {
+      width: 0;
+      height: 0;
+    }
+
+    input:checked + label span {
+      margin-left: 126px;
+      box-shadow: none; 
+      animation: expand 1s;
+    }    
+
+  </style>
+</head>
+<body>
+  <input type="checkbox" name="" id="a">
+  <label for="a">
+    <div></div>
+    <span></span>
+  </label>
+</body>
+</html>
