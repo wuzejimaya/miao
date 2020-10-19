@@ -19,53 +19,34 @@
       position: relative;
       display: inline-block;
       box-sizing: border-box;
-      height: 156px;
+      height: 160px;
       width: 270px;
       border: 3px solid rgb(203, 199, 202);
       border-radius: 100px;
-      background-color: rgb(48, 243, 77);
-      transition: 1s;
-    }
-
-    div {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
-      height: 100%;
-      width: 100%;
-      border-radius: 100px;
-      background-color: white;
-      transition: ease-in-out .7s;
+      transition: .3s;
     }
 
     span {
       position: absolute;
-      width: 133px;
-      height: 133px;
-      box-shadow: 0 5px 20px 5px rgb(186, 186, 182);
+      width: 135px;
+      height: 135px;
+      box-shadow: 0 5px 20px rgb(186, 186, 182);
       border-radius: 100px;
       top: 0;
       bottom: 0;
       margin: auto;
-      margin-left: 6px;
+      left: 12px;
+      transition: 1s;
       background-color: white;
-      transition: margin-left 1s;
     }
 
     input:checked + label {
-      border-color:rgb(48, 243, 77);
-    }
-
-    input:checked + label div {
-      width: 0;
-      height: 0;
+      border-color: rgb(48, 243, 77);
+      box-shadow: 0 0 0 80px rgb(48, 243, 77) inset;
     }
 
     input:checked + label span {
-      margin-left: 126px;
+      left: 120px;
       box-shadow: none; 
       animation: expand 1s;
     }    
@@ -75,7 +56,6 @@
 <body>
   <input type="checkbox" name="" id="a">
   <label for="a">
-    <div></div>
     <span></span>
   </label>
 </body>
