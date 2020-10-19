@@ -5,12 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ios-checkbox</title>
   <style>
-    @keyframes expand {
-      0% {padding-left: 0;}
-      50% {padding-left: 27px;}
-      100% {padding-left: 0;}
-    }
-
     input {
       display: none;
     }
@@ -30,13 +24,14 @@
       position: absolute;
       width: 135px;
       height: 135px;
+      padding: 0;
       box-shadow: 0 5px 20px rgb(186, 186, 182);
       border-radius: 100px;
       top: 0;
       bottom: 0;
       margin: auto;
       left: 12px;
-      transition: 1s;
+      transition: left 1s, width .5s, padding 1s;
       background-color: white;
     }
 
@@ -47,8 +42,10 @@
 
     input:checked + label span {
       left: 120px;
+      width: 75px;
+      padding: 0 30px;
       box-shadow: none; 
-      animation: expand 1s;
+      transition: left 1s, width 1s, padding .5s;
     }    
 
   </style>

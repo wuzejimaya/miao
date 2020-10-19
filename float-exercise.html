@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>float-exercise</title>
+  <style>
+    div.a {
+      width: 330px;
+      float: left;
+      border: 2px solid skyblue;
+      padding-left: 10px;
+      padding-top: 10px;
+    }
+
+    .a span {
+      float: left;
+      box-sizing: border-box;
+      width: 100px;
+      height: 100px;
+      border: 2px solid skyblue;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    .a span:nth-child(4) {
+      width: 210px;
+      height: 210px;
+    }
+
+    .a span:nth-child(n+7):nth-child(-n+12) {
+      float: right;
+    }
+
+    .a span:nth-child(10) {
+      width: 210px;
+      height: 210px;
+    }
+
+    div.xiaomi {
+      float: right;
+      width: 450px;
+      height: 430px;
+      border: 2px solid skyblue;
+    }
+
+    .xiaomi span:first-child {
+      float: left;
+      box-sizing: border-box;
+      width: 100px;
+      height: 410px;
+      border: 2px solid skyblue;
+      margin: 10px;
+    }
+
+    .xiaomi span:nth-child(n+2):nth-child(-n+6) {
+      float: left;
+      box-sizing: border-box;
+      width: 100px;
+      height: 200px;
+      border: 2px solid skyblue;
+      margin: 10px 10px 0 0;
+    }
+
+    .xiaomi span:nth-child(7),
+    .xiaomi span:nth-child(8){
+      float: left;
+      box-sizing: border-box;
+      width: 100px;
+      height: 95px;
+      border: 2px solid skyblue;
+      margin: 10px 10px 0 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="a">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <div class="xiaomi">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</body>
+</html>
