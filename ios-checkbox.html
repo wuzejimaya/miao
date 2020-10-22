@@ -4,11 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ios-checkbox</title>
-  <style>
-    input {
-      display: none;
-    }
-
+  <style type="text/scss">
     label {
       position: relative;
       display: inline-block;
@@ -18,42 +14,43 @@
       border: 3px solid rgb(203, 199, 202);
       border-radius: 100px;
       transition: .3s;
+      &::before {
+        content: "";
+        position: absolute;
+        width: 135px;
+        height: 135px;
+        padding: 0;
+        box-shadow: 0 5px 20px rgb(186, 186, 182);
+        border-radius: 100px;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        left: 12px;
+        transition: left 1s, width .5s, padding 1s;
+        background-color: white;
+      }
     }
 
-    span {
-      position: absolute;
-      width: 135px;
-      height: 135px;
-      padding: 0;
-      box-shadow: 0 5px 20px rgb(186, 186, 182);
-      border-radius: 100px;
-      top: 0;
-      bottom: 0;
-      margin: auto;
-      left: 12px;
-      transition: left 1s, width .5s, padding 1s;
-      background-color: white;
+    input {
+      display: none;
+      &:checked + label {
+        border-color: rgb(48, 243, 77);
+        box-shadow: 0 0 0 80px rgb(48, 243, 77) inset;
+        &::before {
+          content: "";
+          left: 120px;
+          width: 75px;
+          padding: 0 30px;
+          box-shadow: none; 
+          transition: left 1s, width 1s, padding .5s;
+        }
+      }
     }
-
-    input:checked + label {
-      border-color: rgb(48, 243, 77);
-      box-shadow: 0 0 0 80px rgb(48, 243, 77) inset;
-    }
-
-    input:checked + label span {
-      left: 120px;
-      width: 75px;
-      padding: 0 30px;
-      box-shadow: none; 
-      transition: left 1s, width 1s, padding .5s;
-    }    
-
   </style>
+  <script src="sass.link.min.js"></script>
 </head>
 <body>
   <input type="checkbox" name="" id="a">
-  <label for="a">
-    <span></span>
-  </label>
+  <label for="a"></label>
 </body>
 </html>
