@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>star-hover</title>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+  <style type="text/less">
+    body {
+      background-color: rgba(0,0,0,0.1);
+    }
+
+    div {
+      direction:rtl;
+      display:inline-block;
+      font-size: 3em;
+    }
+    i:hover {
+      color: #e3cf7a;
+      ~ i{
+      color: #e3cf7a;
+    }
+    }
+  </style>
+  <script src="less.js"></script>
+</head>
+<body>
+  <div>
+    <i class="fa fa-star fa-inverse"></i>
+    <i class="fa fa-star fa-inverse"></i>
+    <i class="fa fa-star fa-inverse"></i>
+    <i class="fa fa-star fa-inverse"></i>
+    <i class="fa fa-star fa-inverse"></i>
+  </div>
+</body>
+</html>
