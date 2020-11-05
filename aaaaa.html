@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    &:hover {
+      > ul {
+        position: absolute;
+        display: inline-flex;
+        left: 100%;
+        top: 0;
+        box-sizing: border-box;
+        height: 460px;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #e0e0e0;
+        background-color: #fff;
+        z-index: 888;
+        ul {
+          display: flex;
+          flex-flow: column wrap;
+          list-style-type: none;
+          padding: 21px 0 26px 26px;
+          width: 248px;
+          height: 460px;
+          li {
+            box-sizing: border-box;
+            width: 100%;
+            padding-bottom: 37px;
+            &:last-child {
+              padding-bottom: 0;
+            }
+            img {
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+    }
+
+
+
+    $count-per-column: 5;//每列个数
+    $item-width: 80px;//每个元素的宽度
+    $item-height: 30px;//每个元素的高度
+    ul {  
+      list-style: none;  
+      padding: 0;  
+      height: $count-per-column * $item-height;  
+      border: 2px solid red;  
+      xfloat: left;  
+      xposition: absolute;  
+      display: inline-block;
+    }
+    li {  
+      height: $item-height;  
+      width: $item-width;}
+      @for $i from 1 to 15 {    
+        ul li:nth-child(n + #{$i * $count-per-column + 1}) {        
+          margin-left: $i * $item-width;
+        }
+        li:nth-child(#{$count-per-column}n + #{$count-per-column + 1}) {  
+          margin-top: -$item-height * $count-per-column;
+        }
+      }
+  </style>
+</head>
+<body>
+  <blockquote>知识就是力量，法国就是培根</blockquote>
+</body>
+</html>

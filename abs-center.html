@@ -13,7 +13,7 @@
       box-shadow: 0 0 0;
     }
 
-    /* 行内方法一： */
+    /* 行内方法一 */
     div.inline-block-center-1 {
       width: 400px;
       height: 300px;/*这里修改*/
@@ -32,7 +32,7 @@
       text-align: left;
     }
 
-    /* 行内方法二： */
+    /* 行内方法二 */
     div.inline-block-center-2 {
       width: 400px;
       height: 300px;/*可以只改这里*/
@@ -93,6 +93,7 @@
       margin: 20px auto;
     }
 
+    /* flex */
     .flex-center {
       display: flex;
       width: 400px;
@@ -103,9 +104,26 @@
     }
 
     .flex-center span {
-        width: 300px;
-        height: 150px;
-      }
+      width: 300px;
+      height: 150px;
+    }
+
+    /* 定位+2d变换 */
+    .transform {
+      position: relative;
+      width: 400px;
+      height: 300px;
+      margin: auto;
+    }
+
+    .transform span {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 300px;
+      height: 150px;
+      transform: translate(-50%, -50%);
+    }    
   </style>
 </head>
 <body>
@@ -130,6 +148,10 @@
 
   <div class="flex-center">
     <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni, vero. Quas numquam blanditiis ducimus eum, maxime culpa dolore voluptates veritatis dignissimos, quidem illo quasi voluptate pariatur, exercitationem quis saepe aperiam?</span>
+  </div>
+
+  <div class="transform">
+    <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nostrum aliquid repellat non modi id soluta, mollitia cum velit natus molestiae incidunt sunt dicta beatae voluptates nulla hic. Hic, laudantium ad!</span>
   </div>
   
 </body>

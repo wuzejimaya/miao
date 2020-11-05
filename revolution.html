@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>公转但不自转</title>
+  <style>
+    /* 方法一： */
+    @keyframes r1 {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    div {
+      margin: 200px;
+      width: 200px;
+      animation: r1 3s infinite linear;
+    }
+
+    div span {
+      display: inline-block;
+      animation: r1 3s infinite linear reverse;
+    }
+
+    /* 方法二： */
+    @keyframes r2 {
+      from {
+        transform: rotate(0deg) translateX(-100px) rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg) translateX(-100px) rotate(-360deg);
+      }
+    }
+
+    section {
+      margin: 200px 300px;
+      animation: r2 3s infinite linear;
+    }
+
+    /* 方法三： */
+    @keyframes sin {
+      from {
+        margin-left: 0;
+      }
+      to {
+        margin-left: 200px;
+      }
+    }
+    @keyframes cos {
+      from {
+        margin-top: 0;
+      }
+      to {
+        margin-top: 200px;
+      }
+    }
+    em {
+      display: inline-block;
+      animation: sin 3s cubic-bezier(.2,0,.8,1) 999 alternate, cos 3s -1.5s cubic-bezier(.2,0,.8,1) 999 alternate;
+    }
+  </style>
+</head>
+<body>
+  <div><span>我</span></div>
+  <section>我</section>
+  <em>我</em>
+</body>
+</html>
