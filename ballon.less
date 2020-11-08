@@ -19,6 +19,7 @@ button[aria-label] {
     border: 5px solid transparent;
     opacity: 0;
     transition: .18s ease-out .18s;
+    pointer-events: none;
   }
   &:hover::before {
     opacity: 1;
@@ -39,7 +40,7 @@ button[aria-label] {
   &:hover::after {
     opacity: 1;
   }
-  &[data-balloon-pos="up"] {
+  &[data-balloon-pos="up"], &:not([data-balloon-pos]) {
     &::before {
       border-top-color: #1c1812;
       left: 50%;
@@ -201,28 +202,24 @@ button[aria-label] {
     &::after {
       box-sizing: border-box;
       width: 150px;
-      height: 76px;
     }
   }
   &[data-balloon-length="large"] {
     &::after {
       box-sizing: border-box;
       width: 260px;
-      height: 108px;
     }
   }
   &[data-balloon-length="xlarge"] {
     &::after {
       box-sizing: border-box;
       width: 380px;
-      height: 76px;
     }
   }
   &[data-balloon-length="fit"] {
     &::after {
       box-sizing: border-box;
       width: 180px;
-      height: 156px;
     }
   }
   &[data-balloon-blunt] {
