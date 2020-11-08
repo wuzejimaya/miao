@@ -5,119 +5,140 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>radio-slider</title>
   <style type="text/less">
-    body {
-      margin: 0;
-    }
-    section {
+    .slider {
       position: relative;
-      width: 590px;
-      height: 470px;
+      height: 460px;
+      width: 1226px;
       margin: auto;
+      input {
+        display: none;
+        &:nth-child(1):checked ~ ul li:nth-child(1),
+        &:nth-child(2):checked ~ ul li:nth-child(2),
+        &:nth-child(3):checked ~ ul li:nth-child(3),
+        &:nth-child(4):checked ~ ul li:nth-child(4),
+        &:nth-child(5):checked ~ ul li:nth-child(5) {
+          opacity: 1;
+          z-index: 8;
+        }
+        &:nth-child(1):checked ~ .indicators-wrapper .indicators label:nth-child(1),
+        &:nth-child(2):checked ~ .indicators-wrapper .indicators label:nth-child(2),
+        &:nth-child(3):checked ~ .indicators-wrapper .indicators label:nth-child(3),
+        &:nth-child(4):checked ~ .indicators-wrapper .indicators label:nth-child(4),
+        &:nth-child(5):checked ~ .indicators-wrapper .indicators label:nth-child(5) {
+          background-color: hsla(0,0%,100%,.3);
+        }
+      }
       ul {
-        position: absolute;
+        position: relative;
+        height: 100%;
         list-style-type: none;
         padding: 0;
         margin: 0;
-        width: 100%;
-        height: 100%;
         li {
           position: absolute;
           height: 100%;
-          width: 100%;
           opacity: 0;
-          transition: 1s;
-          .left, .right {
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          .left {
             position: absolute;
+            left: 234px;
+            width: 41px;
+            height: 69px;
             top: 0;
             bottom: 0;
             margin: auto;
-            width: 30px;
-            height: 30px;
-            font-size: 20px;
-            line-height: 30px;
-            text-align: center;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.5);
-          }
-          .left {
-            left: 0;
+            color: red;
+            background-image: url("//i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png");
+            background-position: -84px 50%;
+            &:hover {
+              background-position: 0 50%;
+            }
           }
           .right {
+            position: absolute;
             right: 0;
+            width: 41px;
+            height: 69px;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            background-image: url("//i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png");
+            background-position: -125px 50%;
+            &:hover {
+              background-position: -42px 50%;
+            }
           }
         }
       }
-    }
-
-    .indicators-wrapper {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      text-align: center;
-      z-index: 100;
-      .indicators {
-        display: inline-block;
-        cursor: pointer;
+      .indicators-wrapper {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        height: 20px;
+        z-index: 18;
+        text-align: right;
+        .indicators {
+          position: absolute;
+          display: inline-block;
+          right: 30px;
+          label {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border: 2px solid #fff;
+            border-color: hsla(0,0%,100%,.3);
+            border-radius: 10px;
+            background: rgba(0,0,0,.4);
+            margin: 0 4px;
+            cursor: pointer;
+            &:hover {
+              background-color: hsla(0,0%,100%,.3);
+            }
+          }
+        }
       }
-      label{
-        width: 10px;
-        height: 10px;
-        border-radius: 5px;
-        background-color: red;
-        display: inline-block;
-      }
-    }
-
-    input:nth-child(1):checked ~ ul li:nth-child(1), 
-    input:nth-child(2):checked ~ ul li:nth-child(2), 
-    input:nth-child(3):checked ~ ul li:nth-child(3), 
-    input:nth-child(4):checked ~ ul li:nth-child(4), 
-    input:nth-child(5):checked ~ ul li:nth-child(5) {
-      opacity: 1;
-      z-index: 8;
-    }
-
-    input {
-      display: none;
-    }
+  }
   </style>
   <script src="less.js"></script>
 </head>
 <body>
-  <section>
-    <input type="radio" checked name="slider" id="s1">
+  <div class="slider">
+    <input type="radio" name="slider" id="s1" checked>
     <input type="radio" name="slider" id="s2">
     <input type="radio" name="slider" id="s3">
     <input type="radio" name="slider" id="s4">
     <input type="radio" name="slider" id="s5">
     <ul>
       <li>
-        <a href=""><img src="https://img13.360buyimg.com/babel/s590x470_jfs/t1/121171/1/13998/79761/5f7435b8E7e1ba3f0/58b69a68c4bb04bc.jpg.webp" alt=""></a>
-        <label for="s5" class="left"><</label>
-        <label for="s2" class="right">></label>
+        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/676ddccc418842904f82ccdc66bbaa34.jpg?w=2452&h=920" alt="">
+        <label class="left" for="s5"></label>
+        <label class="right" for="s2"></label>
       </li>
       <li>
-        <img src="https://img12.360buyimg.com/pop/s590x470_jfs/t1/149454/36/9251/92742/5f6e8c4bEcad4b377/15ca2e425a024a29.jpg.webp" alt="">
-        <label for="s1" class="left"><</label>
-        <label for="s3" class="right">></label>
+        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/cf6ba4d372b80e939104cf369f14139a.jpg?thumb=1&w=1226&h=460&f=webp&q=90" alt="">
+        <label class="left" for="s1"></label>
+        <label class="right" for="s3"></label>
       </li>
       <li>
-        <img src="https://imgcps.jd.com/ling4/100008348542/5Lqs6YCJ5aW96LSn/5L2g5YC85b6X5oul5pyJ/p-5bd8253082acdd181d02fa06/2423bc99/cr/s/q.jpg" alt="">
-        <label for="s2" class="left"><</label>
-        <label for="s4" class="right">></label>
+        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/9d1151c2b2d53489a9db2b5db39ad07b.jpg?thumb=1&w=1226&h=460&f=webp&q=90" alt="">
+         <label class="left" for="s2"></label>
+         <label class="right" for="s4"></label>
+       </li>
+       <li>
+        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/0ef4160c861b998239bce9adb82341e7.jpg?thumb=1&w=1226&h=460&f=webp&q=90" alt="">
+        <label class="left" for="s3"></label>
+        <label class="right" for="s5"></label>
       </li>
       <li>
-        <img src="https://img11.360buyimg.com/pop/s590x470_jfs/t1/94450/1/4842/98647/5de8ec80E551e8333/f8b2db6f163a876c.jpg.webp" alt="">
-        <label for="s3" class="left"><</label>
-        <label for="s5" class="right">></label>
-      </li>
-      <li>
-        <img src="https://img10.360buyimg.com/pop/s590x470_jfs/t1/139982/12/10398/66704/5f80193dE57b271a3/87461d06d50ea019.jpg.webp" alt="">
-        <label for="s4" class="left"><</label>
-        <label for="s1" class="right">></label>
+        <img src="https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/fe25c546580ff179bf6e60fb54d7afd4.jpg?thumb=1&w=1226&h=460&f=webp&q=90" alt="">
+        <label class="left" for="s4"></label>
+        <label class="right" for="s1"></label>
       </li>
     </ul>
-
     <div class="indicators-wrapper">
       <div class="indicators">
         <label for="s1"></label>
@@ -127,6 +148,6 @@
         <label for="s5"></label>
       </div>
     </div>
-  </section>
+  </div>
 </body>
 </html>
