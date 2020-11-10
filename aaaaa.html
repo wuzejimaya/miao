@@ -7,6 +7,25 @@
   <style>
  
   </style>
+  <script>
+    var a = +prompt('please input a:')
+    var b = +prompt('please input b:')
+    var c = +prompt('please input c:')
+    var delta = b * b - 4 * a * c
+  
+    if (delta < 0) {
+      console.log('无解')
+    } else if (delta == 0) {
+      var x = (-b) / (2 * a)
+      console.log("x = "+ x)
+    } else {
+      var x1 = (-b + Math.sqrt(delta)) / (2 * a)
+      var x2 = (-b - Math.sqrt(delta)) / (2 * a)
+      console.log("x1 = "+ x1)
+      console.log("x2 = " + x2)
+    }
+    
+  </script>
 </head>
 <body>
   
