@@ -54,7 +54,7 @@
 
 <script type="norun" id="ch0103/09">
   var r = Number(prompt())
-  console.log((2 * r).toFixed(4), (2 * Math.PI * r).toFixed(4), (Math.PI * r * r).toFixed(4))
+  console.log((2 * r).toFixed(4), (2 * Math.PI.toFixed(5) * r).toFixed(4), (Math.PI.toFixed(5) * r * r).toFixed(4))
 </script>
 
 <script type="norun" id="ch0103/10">
@@ -77,7 +77,7 @@
 <script type="norun" id="ch0103/13">
   var n = String(prompt())
   var m = n.charAt(n.length - 1) + n.charAt(n.length - 2) + n.charAt(n.length - 3)
-  console.log(Number(m))
+  console.log(m)
 </script>
 
 <script type="norun" id="ch0103/14">
@@ -137,7 +137,7 @@
   var n = Number(prompt())
   if (n > 0) {
     console.log("positive")
-  } else if (n=0) {
+  } else if (n == 0) {
     console.log("zero")
   } else {
     console.log("negative")
@@ -156,7 +156,7 @@
   }
 </script>
 <script type="norun" id="ch0104/04">
-  var a = String(prompt()).charAt()
+  var a = String(prompt()).charCodeAt()
   if (a % 2 == 1) {
     console.log("YES")
   } else {
@@ -332,7 +332,7 @@
   }
 </script>
 
-<script type="norun" id="ch0104/20">
+<script xtype="norun" id="ch0104/20">
   var a = Number(prompt())
   var b = Number(prompt())
   var c = Number(prompt())
@@ -345,16 +345,17 @@
     console.log("x1=" + x1.toFixed(5) + ';' + "x2=" + x2.toFixed(5))
   } else if (b * b == 4 * a * c) {
     x1 = (- b) / (2 * a)
+    x2 = x1
     console.log("x1=x2=" + x1.toFixed(5))
   } else {
     delta = - delta;
     var realPart = - b / (2 * a)
     var imaginaryPart = Math.sqrt(delta) / (2 * a)
-    console.log("x1=" + realPart.toFixed(5) + '+' + imaginaryPart.toFixed(5) + 'i' + ';' + "x2=" + realPart.toFixed(5) + '-' + imaginaryPart.toFixed(5) + 'i' + ';')
+    console.log("x1=" + realPart.toFixed(5) + '+' + imaginaryPart.toFixed(5) + 'i' + ';' + "x2=" + realPart.toFixed(5) + '-' + imaginaryPart.toFixed(5) + 'i')
   }
 </script>
 
-<script xtype="norun" id="ch0104/21">
+<script type="norun" id="ch0104/21">
   var n = Number(prompt())
   var x = Number(prompt())
   var y = Number(prompt())
