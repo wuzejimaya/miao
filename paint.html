@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>画图</title>
+  <style>
+    canvas {
+      border: 2px solid #f0f;
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas width="400" height="300"></canvas>
+</body>
+<script>
+  var canvas = document.querySelector('canvas')
+  canvas.style.imageRendering = 'pixelated'
+  var ctx = canvas.getContext('2d')
+
+  function dot(x, y, color = 'black') {
+    x = x | 0
+    y = y | 0
+    ctx.fillStyle = color
+    ctx.fillRect(x, y, 1, 1)
+  }
+
+  function line(x1, y1, x2, y2) {
+    ctx.strokeStyle = 'black'
+    ctx.moveTo(x1, y1)
+    ctx.lineTo(x2, y2)
+    ctx.stroke()
+  }
+  /**
+   * YOUR TASK
+画图的题：
+画一条实线
+画一条一个实点一个空点的虚线
+画一条两个实点两个空点的虚线
+画一条三个实点两个空点的虚线
+画一条45度的斜线
+画一条30度的斜线（选做）
+在四个角画分别画一条45度的斜线以让画面看起来像一个相框
+画一条跨越画布左上角和右下角的对角线
+画一个空心矩形
+画一个实心矩形
+画一个rgb色彩空间的某一面
+画一个空心的圆
+画一个实心的圆
+画一个大小合适的sin(x)的图像
+   */
+</script>
+<script>
+  // 画一条实线
+  var x = 40
+  var y = 30
+  for (var i = 0; i < 100; i++) {
+    dot(x, y, 'black')
+    x++
+  }
+  //画一条一个实点一个空点的虚线
+  x = 40
+  y = 40
+  for (var i = 0; i < 50; i++) {
+    dot(x, y, 'black')
+    x += 2
+  }
+  //画一条两个实点两个空点的虚线
+  x = 40
+  y = 50
+  for (var i = 0; i < 25; i++) {
+    dot(x, y, 'black')
+    x++
+    dot(x, y, 'black')
+    x +=3
+  }
+  //画一条三个实点两个空点的虚线
+  x = 40
+  y = 60
+  for (var i = 0; i < 20; i++) {
+    dot(x, y, 'black')
+    x++
+    dot(x, y, 'black')
+    x++
+    dot(x, y, 'black')
+    x += 3
+  }
+  //画一条45度的斜线
+  x = 40
+  y = 70
+  for (var i = 0; i < 100; i++) {
+    dot(x, y, 'black')
+    x++
+    y++
+  }
+  //画一条30度的斜线（选做）
+  var x = 40
+  var y = 140
+  for (var i = 0; i < 50; i++) {
+    dot(x, y, 'black')
+    y++
+    x += Math.sqrt(3)
+  }
+  //在四个角画分别画一条45度的斜线以让画面看起来像一个相框
+  var x = 20
+  var y = 15
+  for(var i = 0; i < 360; i++) {
+    dot(x, y, 'black')
+    x++
+  }
+  for(var i = 0; i < 270; i++) {
+    dot(x, y, 'black')
+    y++
+  }
+  for(var i = 0; i < 360; i++) {
+    dot(x, y, 'black')
+    x--
+  }
+  for(var i = 0; i < 270; i++) {
+    dot(x, y, 'black')
+    y--
+  }
+  x = 50
+  for(var i = 0; i < 30; i++) {
+    dot(x, y, 'black')
+    x--
+    y++
+  }
+  x = 380
+  for(var i = 0; i < 30; i++) {
+    dot(x, y, 'black')
+    x--
+    y--
+  }
+  y = 285
+  for(var i = 0; i < 30; i++) {
+    dot(x, y, 'black')
+    x++
+    y--
+  }
+  x = 20
+  for(var i = 0; i < 30; i++) {
+    dot(x, y, 'black')
+    x++
+    y++
+  }
+  //画一条跨越画布左上角和右下角的对角线
+  x = 0
+  y = 0
+  for(var i = 0; i < 400; i++) {
+    dot(x, y, 'black')
+    x++
+    y += 3 / 4
+  }
+  //画一个空心矩形
+  for (var i = 30; i < 110; i++) {
+    for (var j = 200; j < 260; j++) {
+      if (i == 30 || i == 109 || j == 200 || j == 259)
+        dot(i, j, 'black')
+    }
+  }
+  //画一个实心矩形
+  for (var i = 120; i < 200; i++) {
+    for (var j = 200; j < 260; j++) {
+      dot(i, j, 'red')
+    }
+  }
+  // 画一个rgb色彩空间的某一面
+  var x = 210
+  var y = 190
+  var color
+  for (var i = 255; i >= 0; i -= 3) {
+    for (var j = 0; j < 256; j += 3) {
+      if (i < 16 && j > 16) {
+        color = '#' + 'ff' + j.toString(16) + '0' + i.toString(16)
+      } else if (j < 16 && i > 16) {
+        color = '#' + 'ff' + '0' + j.toString(16) + i.toString(16)
+      } else if (i < 16 && j < 16) {
+        color = '#' + 'ff' + '0' + j.toString(16) + '0' + i.toString(16)
+      } else {
+        color = '#' + 'ff' + j.toString(16) + i.toString(16)
+      }
+      dot(x, y, color)
+      x++
+    }
+    x = 210
+    y++
+  }
+  //画一个空心的圆
+  var x0 = 200
+  var y0 = 80
+  var r = 50
+  for (var i = - Math.PI; i < Math.PI; i += Math.PI / 360) {
+    dot (x, y, 'red')
+    x = x0 + r * Math.cos(i)
+    y = y0 + r * Math.sin(i) 
+  }
+  //画一个实心的圆
+  var x0 = 320
+  var y0 = 80
+  var r = 50
+  for (var i = 0; i < r; i++) {
+    for (var j = - Math.PI; j < Math.PI; j += Math.PI / 360) {
+      dot (x, y, 'red')
+      x = x0 + i * Math.cos(j)
+      y = y0 + i * Math.sin(j) 
+    }
+  }
+  //画一个大小合适的sin(x)的图像
+  var x0 = 220
+  var y0 = 160
+ for (var i = 0; i < 40 * Math.PI; i += Math.PI / 360) {
+   dot(x, y, 'red')
+   x = x0 + i
+   y = y0 - 20 * Math.sin(i / 10)
+ }
+</script>
+</html>
