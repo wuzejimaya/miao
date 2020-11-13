@@ -710,7 +710,7 @@
     t9 = (decimal - u9) / 9 % 9
     h9 = ((decimal - u9) / 9 - t9) / 9
     if (h7 < 7 && h9 < 9 && u7 == h9 && t7 == t9 && h7 == u9) {
-      console.log(decimal, Number("" + h7 + t7 + u7), Number("" + h9 + t9 + u9))
+      console.log(decimal, "" + h7 + t7 + u7, "" + h9 + t9 + u9)
       break
     } else {
       decimal++
@@ -744,3 +744,45 @@
   }
   console.log(n)
 </script>
+
+<script type="norun" id="ch0105/28">
+  var digit = Number(prompt())
+  do {
+    var a = digit % 10
+    console.log(a)
+    var digit = (digit - a) / 10
+  } while (digit > 0)
+</script>
+
+<script type="norun" id="ch0105/29">
+  var digit = Number(prompt())
+  var result = ""
+  if (digit < 0) {
+    digit = - digit
+    result += '-'
+  }
+  while (digit != 0 && digit % 10 == 0) {
+    digit /= 10
+  }
+  do {
+    var a = digit % 10
+    result = result + a
+    var digit = (digit - a) / 10
+  } while (digit > 0)
+  console.log(result)
+</script>
+
+<script type="norun" id="ch0105/29">
+  var digit = Number(prompt())
+  var result = 0
+  while (digit != 0 && digit % 10 == 0) {
+    digit /= 10
+  }
+  do {
+      var a = digit % 10
+      result = result * 10 + a
+      var digit = (digit - a) / 10
+  } while (digit != 0)
+  console.log(result)
+</script>
+
