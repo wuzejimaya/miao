@@ -694,7 +694,7 @@
   console.log(max)
 </script>
 
-<script type="norun" id="ch0105/25">
+<script xtype="norun" id="ch0105/25">
   var decimal = 1 //十进制数
   var u7 //七进制个位
   var t7 //七进制十位
@@ -710,16 +710,12 @@
     t9 = (decimal - u9) / 9 % 9
     h9 = ((decimal - u9) / 9 - t9) / 9
     if (h7 < 7 && h9 < 9 && u7 == h9 && t7 == t9 && h7 == u9) {
-      console.log(decimal)
+      console.log(decimal, Number("" + h7 + t7 + u7), Number("" + h9 + t9 + u9))
       break
     } else {
       decimal++
     }
   }
-  var septenary = Number("" + h7 + t7 + u7)
-  console.log(septenary)
-  var novenary = Number("" + h9 + t9 + u9)
-  console.log(novenary)
 </script>
 
 <script type="norun" id="ch0105/26">
@@ -736,4 +732,19 @@
     }
   }
   console.log(couter)
+</script>
+
+<script type="norun" id="ch0105/27">
+  var K = Number(prompt())
+  var Sn = 1
+  var n = 1
+  while(Sn <= K) {
+    n++
+    Sn += 1 / n 
+  }
+  console.log(n)
+</script>
+
+<script type="norun" id="ch0105/28">
+  
 </script>
