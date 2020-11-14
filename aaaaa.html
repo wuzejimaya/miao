@@ -7,25 +7,65 @@
   <style>
  
   </style>
-  <script>
-    var a = +prompt('please input a:')
-    var b = +prompt('please input b:')
-    var c = +prompt('please input c:')
-    var delta = b * b - 4 * a * c
   
-    if (delta < 0) {
-      console.log('无解')
-    } else if (delta == 0) {
-      var x = (-b) / (2 * a)
-      console.log("x = "+ x)
-    } else {
-      var x1 = (-b + Math.sqrt(delta)) / (2 * a)
-      var x2 = (-b - Math.sqrt(delta)) / (2 * a)
-      console.log("x1 = "+ x1)
-      console.log("x2 = " + x2)
+
+<script xtype="foo" id="ch0105/25">
+  for (var i = 1; i <= 999; i++) {
+    var a7 = i % 7; //七进制个位数
+    var b7 = ((i - a7) / 7) % 7; //七进制七位数
+    var c7 = ((i - a7 - b7 * 7) / 7 / 7) % 7; //七进制四十九位数
+    var a9 = i % 9;
+    var b9 = ((i - a9) / 9) % 9;
+    var c9 = ((i - a9 - b9 * 9) / 9 / 9) % 9;
+    if (a7 == c9 && b7 == b9 && c7 == a9) {
+      // console.log(i, "" + c7 + b7 + a7, "" + c9 + b9 + a9);
     }
-    
-  </script>
+  }
+  console.log("（不提供）");
+</script>
+<script type="foo">
+  
+  for (var i = 0; i < 7; i++) {
+    var result = ''
+    for (var j = i; j >= 0; j--) {
+      result += '#'
+    }
+    console.log(result)
+  }
+</script>
+
+<script type="foo">
+  for (var i = 1; i <= 100; i++) {
+    if(i % 3 == 0 && i % 5 == 0) {
+      console.log("FizzBuzz")
+    } else if (i % 3 == 0) {
+      console.log('Fizz')
+    } else if (i % 5 == 0) {
+      console.log('Buzz')
+    } else {
+      console.log(i)
+    }
+  }
+</script>
+
+<script type="norun">
+  var size = Number(prompt())
+  var w = Number(prompt())
+  var h = Number(prompt())
+  for (var i = 0; i < h; i++) {
+    var result = ''
+    for (var j = 0; j < w; j++) {
+      if (i % 2 == 0 && j % 2 == 0) {
+        result += '#'
+      } else if (i % 2 == 1 && j % 2 == 1) {
+        result += '#'
+      } else {
+        result += ' '
+      }
+    }
+    console.log(result)
+  }
+</script>
 </head>
 <body>
   
