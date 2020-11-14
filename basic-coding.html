@@ -710,7 +710,9 @@
     t9 = (decimal - u9) / 9 % 9
     h9 = ((decimal - u9) / 9 - t9) / 9
     if (h7 < 7 && h9 < 9 && u7 == h9 && t7 == t9 && h7 == u9) {
-      console.log(decimal, "" + h7 + t7 + u7, "" + h9 + t9 + u9)
+      console.log(decimal)
+      console.log("" + h7 + t7 + u7)
+      console.log("" + h9 + t9 + u9)
       break
     } else {
       decimal++
@@ -786,3 +788,260 @@
   console.log(result)
 </script>
 
+<script type="norun" id="ch0105/30">
+  var m = Number(prompt())
+  var n = m
+  var k = Number(prompt())
+  var couter = 0
+  while (m > 0) {
+    var a = m % 10
+    if (a == 3) {
+      couter++
+    }
+    m = (m - a) / 10
+  }
+  if (couter == k && n % 19 == 0) {
+    console.log('YES')
+  } else {
+    console.log('NO')
+  }
+</script>
+
+<script type="norun" id="ch0105/31">
+  var N = Number(prompt())
+  var M = Number(prompt())
+  var result = ''
+  for (var i = 1; i <= N; i ++) {
+    var flag = true
+    for (var j = 1; j <= M; j++) {
+      if (i % j == 0) {
+        flag = !flag
+      }
+    }
+    if (!flag) {
+      result = result + i + ','
+    }
+  }
+  console.log(result.substring(0, result.length - 1))
+</script>
+
+<script type="norun" id="ch0105/32">
+  var n = Number(prompt())
+  var p = 1
+  var q = 2
+  var sum = 0
+  for (var i = 0; i < n; i++) {
+    sum += q / p
+    var a = q
+    q = q + p
+    p = a
+  }
+  console.log(sum.toFixed(4))
+</script>
+
+<script type="norun" id="ch0105/33">
+  var n = Number(prompt())
+  var sum = 0
+  for (var i = 1; i <= n; i++) {
+    sum = sum + (Math.pow(-1, i -1) * 1 / i)
+  }
+  console.log(sum.toFixed(4))
+</script>
+
+<script type="norun" id="ch0105/34">
+  var n = Number(prompt())
+  var sum = 0
+  for(var i = 1; i <= n; i++) {
+    var item = 1 
+    for(var j = 1; j <= i; j++) {
+      item *= j
+    }
+    sum += item
+  }
+  console.log(sum)
+</script>
+
+<script type="norun" id="ch0105/35">
+  var n = Number(prompt())
+  var e = 1
+  for(var i = 1; i <= n; i++) {
+    var item = 1 
+    for(var j = 1; j <= i; j++) {
+      item *= j
+    }
+    e += 1 / item
+  }
+  console.log(e.toFixed(10))
+</script>
+
+<script type="norun" id="ch0105/36">
+  var x = Number(prompt())
+  var n = Number(prompt())
+  var sum = 0
+  for(var i = 0; i <= n; i++) {
+    var item = 1
+    for (var j = 0; j < i; j++) {
+      item *= x
+    }
+    sum += item
+  }
+  console.log(sum.toFixed(2))
+</script>
+
+<script type="norun" id="ch0105/37">
+  var M = Number(prompt()) //体力最大值
+  var N = Number(prompt()) //战斗力
+  var X = Number(prompt()) //能量元素的个数，用来补充体力
+  while (X >= 0 && M >= N) {
+    X = X - Math.ceil(M / N) //补充体力
+    N = N + Math.floor(M / N) //战斗提升战斗力
+  }
+  console.log(N)
+</script>
+
+<script type="norun" id="ch0105/38">
+  var number = Number(prompt())
+  for (var i = 0; i < number; i++) {
+    var n = Number(prompt())
+    for (var j = n; j > 0; j--) {
+      var a = Number(prompt())
+      var c = a * j
+      console.log(c)
+    }
+    prompt()
+    if (n == 0) {
+      console.log(0)
+    }
+  }
+</script>
+
+<script type="norun" id="ch0105/39">
+  var n = Number(prompt())
+  var sum = 0
+  for (var i = 0; i < n; i++) {
+    if (i % 7 != 0 && i % 10 != 7 && (i - (i % 10)) / 10 != 7) {
+      sum += i * i
+    }
+  }
+  console.log(sum)
+</script>
+
+<script type="norun" id="ch0105/40">
+  var n = Number(prompt())
+  var couter = 0
+  for (var i = 1; i <= n; i++) {
+    var a = i % 10
+    var b = (i - a) / 10 % 10
+    var c = (i - a - b * 10) / 100 % 10
+    var d = (i - a - b * 10 - c * 100) / 1000 % 10
+    if (a == 1) {
+      couter++
+    }
+    if (b == 1) {
+      couter++
+    }
+    if (c == 1) {
+      couter++
+    }
+    if (d == 1) {
+      couter++
+    }
+  }
+  console.log(couter)
+</script>
+
+<script type="norun" id="ch0105/41">
+  var L = Number(prompt())
+  var R = Number(prompt())
+  var couter = 0
+  for (var i = L; i <= R; i++) {
+    var a = i % 10
+    var b = (i - a) / 10 % 10
+    var c = (i - a - b * 10) / 100 % 10
+    var d = (i - a - b * 10 - c * 100) / 1000 % 10
+    if (a == 2) {
+      couter++
+    }
+    if (b == 2) {
+      couter++
+    }
+    if (c == 2) {
+      couter++
+    }
+    if (d == 2) {
+      couter++
+    }
+  }
+  console.log(couter)
+</script>
+
+<script type="norun" id="ch0105/42">
+  var h = Number(prompt())
+  var w = Number(prompt())
+  var char = prompt()
+  var flag = Number(prompt())
+  var result = ""
+  for (var i = 0; i < h; i++) {
+    for (var j = 0; j < w; j++) {
+      if (!flag && j != 0 && j != w -1 && i != 0 && i != h - 1) {
+        result += ' '
+      } else {
+        result += char
+      }
+    }
+    console.log(result)
+    result = ""
+  }
+</script>
+
+<script type="norun" id="ch0105/43">
+  var n = Number(prompt())
+  var max = 0
+  for (var i = 2; i < n; i ++) {
+    var flag = true
+    //判断是不是质数
+    for (var j = 2; j < i; j++) {
+      if (i % j == 0) {
+        flag = false
+        break
+      }
+    }
+    if (n % i == 0 && flag && i > max) {
+      max = i
+    }
+  }
+  console.log(max)
+</script>
+
+<script type="norun" id="ch0105/44">
+  var n = Number(prompt())
+  var couter = 0
+  var result
+  for (var i = 2; couter != n; i ++) {
+    var flag = true
+    //判断是不是质数
+    for (var j = 2; j < i; j++) {
+      if (i % j == 0) {
+        flag = false
+        break
+      }
+    }
+    if (flag) {
+      couter++
+      result = i
+    }
+  }
+  console.log(result)
+</script>
+
+<script type="norun" id="ch0105/45">
+  var N  = Number(prompt())
+  var sum = 0
+  var i
+  for(i = 1; i * (i + 1) / 2 <= N; i++) {
+    sum += i * i
+  }
+  i--
+  sum += (N - i * (i + 1) / 2) * (i + 1)
+  console.log(sum)
+</script>

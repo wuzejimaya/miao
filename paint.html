@@ -99,8 +99,8 @@
   var y = 140
   for (var i = 0; i < 50; i++) {
     dot(x, y, 'black')
-    y++
-    x += Math.sqrt(3)
+    x++
+    y += 1 / Math.sqrt(3) //浮点运算比较慢
   }
   //在四个角画分别画一条45度的斜线以让画面看起来像一个相框
   var x = 20
