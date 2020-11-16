@@ -791,20 +791,23 @@
 
 <script type="norun" id="ch0105/30">
   var m = Number(prompt())
-  var n = m
   var k = Number(prompt())
-  var couter = 0
-  while (m > 0) {
-    var a = m % 10
-    if (a == 3) {
-      couter++
-    }
-    m = (m - a) / 10
-  }
-  if (couter == k && n % 19 == 0) {
-    console.log('YES')
-  } else {
+  if (m % 19 !== 0) {
     console.log('NO')
+  } else {
+    var couter = 0
+    while (m > 0) {
+      var a = m % 10
+      if (a == 3) {
+        couter++
+      }
+      m = (m - a) / 10
+    }
+    if (couter == k) {
+      console.log('YES')
+    } else {
+      console.log('NO')
+    }
   }
 </script>
 
@@ -815,7 +818,7 @@
   for (var i = 1; i <= N; i ++) {
     var flag = true
     for (var j = 1; j <= M; j++) {
-      if (i % j == 0) {
+      if (i % j) {
         flag = !flag
       }
     }
@@ -931,21 +934,13 @@
   var n = Number(prompt())
   var couter = 0
   for (var i = 1; i <= n; i++) {
-    var a = i % 10
-    var b = (i - a) / 10 % 10
-    var c = (i - a - b * 10) / 100 % 10
-    var d = (i - a - b * 10 - c * 100) / 1000 % 10
-    if (a == 1) {
-      couter++
-    }
-    if (b == 1) {
-      couter++
-    }
-    if (c == 1) {
-      couter++
-    }
-    if (d == 1) {
-      couter++
+    var m = i
+    while (m > 0) {
+      var digit = m % 10
+      if (digit === 1) {
+        couter++
+      }
+      m = (m - digit) / 10
     }
   }
   console.log(couter)
@@ -956,21 +951,13 @@
   var R = Number(prompt())
   var couter = 0
   for (var i = L; i <= R; i++) {
-    var a = i % 10
-    var b = (i - a) / 10 % 10
-    var c = (i - a - b * 10) / 100 % 10
-    var d = (i - a - b * 10 - c * 100) / 1000 % 10
-    if (a == 2) {
-      couter++
-    }
-    if (b == 2) {
-      couter++
-    }
-    if (c == 2) {
-      couter++
-    }
-    if (d == 2) {
-      couter++
+    var m = i
+    while (m > 0) {
+      var digit = m % 10
+      if (digit === 2) {
+        couter++
+      }
+      m = (m - digit) / 10
     }
   }
   console.log(couter)
@@ -1021,11 +1008,16 @@
   for (var i = 2; couter != n; i ++) {
     var flag = true
     //判断是不是质数
-    for (var j = 2; j < i; j++) {
-      if (i % j == 0) {
-        flag = false
-        break
+    var sqrt_n = Math.sqrt(i) //平方根优化
+    if (i == 2 || i == 3 || i % 6 == 1 || i % 6 == 5) {
+      for (var j = 2; j <= sqrt_n; j++) {
+        if (i % j == 0) {
+          flag = false
+          break
+        }
       }
+    } else {
+      flag = false
     }
     if (flag) {
       couter++
@@ -1045,4 +1037,186 @@
   i--
   sum += (N - i * (i + 1) / 2) * (i + 1)
   console.log(sum)
+
+  //可以直接用公式写，不用循环
+  /*var d = Number(prompt())
+  var delta = Math.sqrt(1 + 4 * 2 * d)
+  var n = Math.floor((1 - delta) / 2)
+  var restDay = d - n * (n + 1) / 2
+  var result = n * (n + 1) * (2 * n + 1) / 6 + restDay * (n + 1)
+  console.log(result)*/
+</script>
+
+<script xtype="norun">
+  //求一个正数的平方根
+  var sqrt = function (n) {
+    for (var i = 0; i <= n; i++) {
+      if (i * i == n) {
+        return i
+      }
+    }
+  }
+  //判断一个数是否为水仙花数
+  var narcissistic = function (n) {
+    if (n < 100 || n > 999) {
+      return false
+    }
+    var sum = 0
+    var m = n
+    for (var i = 0; i < 3; i++) {
+      var degit = n % 10
+      n = (n - degit) / 10
+      sum += degit * degit * degit
+    }
+    if (sum == m) {
+      return true
+    }
+    return false
+  }
+  //输出所有水仙花数
+  var narcissistics = function () {
+    for (var i = 100; i < 1000; i++) {
+      if (narcissistic(i)) {
+        console.log(i)
+      }
+    }
+  }
+  narcissistics()
+  //求阶乘
+  var palindrom = function(n) {
+    var result = 1
+    for (var i = 2; i <= n; i++) {
+      result *= i
+    }
+    return result
+  }
+  //给年和月，计算这个月的第一天是星期几
+  var weekday = function(year, month) {
+    var day = 1
+    for (var i = 1; i < year; i++) {
+      if (isLeap(i)) {
+        day += 366
+      } else {
+        day += 365
+      }
+    } 
+    for (var i = 1; i < month; i++) {
+      if (i == 4 || i == 6 || i == 9 || i == 11) {
+        day += 30
+      } else if (i == 2 && isLeap(year)) {
+        day += 29
+      } else if (i == 2 && !isLeap(year)) {
+        day += 28
+      } else {
+        day += 31
+      }
+    }
+    var weekday = day % 7
+    if (weekday == 0) {
+      return 7
+    }
+    return weekday
+  }
+  var isLeap = function(year) {
+    if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+      return true
+    } 
+    return false
+  }
+  //写一个函数求一个数是否为完全数（它的因子之和等于它自己）
+  var complete_number = function(n) {
+    if (n <= 0) {
+      return false
+    } 
+    var sum = 0
+    for (var i = 1; i < n; i++) {
+      if (n % i == 0) {
+        sum += i
+      }
+    }
+    if (sum == n) {
+      return true
+    }
+    return false
+  }
+  //数出1000以内的所有完全数
+  var complete_numbers = function() {
+    for(var i = 1; i <= 1000; i++) {
+      if (complete_number(i)) {
+        console.log(i)
+      }
+    }
+  }
+  //判断素数
+  var prime = function(n) {
+    if (n == 1) {
+      return false
+    }
+    if(n == 2 || n == 3) {
+      return true
+    }
+    if (n % 6 != 1 && n % 6 != 5) {
+      return false
+    }
+    var sqrt_n = Math.sqrt(n)
+    for(var i = 2; i < sqrt_n; i++) {
+      if (n % i == 0) {
+        return false
+      }
+    }
+    return true
+  }
+  //输出1000以内的素数
+  var primes = function() {
+    for (var i = 1; i <= 1000; i++) {
+      if(prime(i)) {
+        console.log(i)
+      }
+    }
+  }
+  //不使用隐式类型转换将一个数字转换为字符串
+  var itob = function(n) {
+    return '' + n
+  }
+  //写函数求出两个数的最大公约数
+  var lcf = function(m, n) {
+    if (m == 0 && n !=0) {
+      return n
+    }else if(n == 0 && m != 0) {
+      return m
+    }
+    var min = Math.min(m, n)
+    for (var i = 1; i <= min; i++) {
+      if (n % i == 0 && m % i == 0) {
+        var max = i
+      }
+    }
+    return max
+  }
+  //写函数求出两个数的最小公倍数
+  var lcm = function(m, n) {
+    var result = 1
+    var max = Math.max(m, n)
+    for (var i = 2; max > 1; i++) {
+      if (m % i == 0 && n % i == 0) {
+        result *= i
+        m /= i
+        n /= i
+        i--
+        var max = Math.max(m, n)
+      } else if (m % i == 0 && n % i != 0) {
+        result *= i
+        m /= i
+        i--
+        var max = Math.max(m, n)
+      } else if (m % i != 0 && n % i == 0) {
+        result *= i
+        n /= i
+        i--
+        var max = Math.max(m, n)
+      }
+    }
+    return result
+  }
+  console.log(lcm(36, 270))
 </script>
