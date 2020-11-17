@@ -1049,46 +1049,95 @@
 
 <script xtype="norun">
   //求一个正数的平方根
-  var sqrt = function (n) {
-    for (var i = 0; i <= n; i++) {
-      if (i * i == n) {
-        return i
+  function sqrt(n) {//二分法
+    var l = 0
+    var r = n
+    while (r - l > 0.000001) {
+      var m = (l + r)  / 2
+      if (m * m == n) {
+        return m
+      }
+      if (n > m * m) {
+        l = m
+      } else {
+        r = m
       }
     }
+    return m
+  }
+  function sqrt(n) {//牛顿法
+    var x = n
+    while (Math.abs(x * x - n) > 0.00000000001) {
+      var x = (x + n / x) / 2
+      // console.log(x)
+    }
+    return x 
   }
   //判断一个数是否为水仙花数
-  var narcissistic = function (n) {
-    if (n < 100 || n > 999) {
-      return false
+  function digitWidth(n) {//计算十进制n的位宽
+    var width = 0
+    do {
+      var digit = n % 10
+      n = (n - digit) / 10
+      width++
+    } while (n > 0)
+    return width
+  }
+  function power(x, n) {//计算x的n次方
+    var exp = 1
+    for (var i = 0; i < n; i++) {
+      exp *= x
     }
+    return exp
+  }
+  function isNarcissistic(n) {
     var sum = 0
     var m = n
-    for (var i = 0; i < 3; i++) {
-      var degit = n % 10
-      n = (n - degit) / 10
-      sum += degit * degit * degit
+    var width = digitWidth(n)
+    for (var i = 0; i < width; i++) {
+      var digit = m % 10
+      m = (m - digit) / 10
+      sum += power(digit, width)
     }
-    if (sum == m) {
-      return true
-    }
-    return false
+    return sum == n
   }
   //输出所有水仙花数
-  var narcissistics = function () {
-    for (var i = 100; i < 1000; i++) {
-      if (narcissistic(i)) {
+  function narcissistics() {
+    for (var i = 0; i < 10000; i++) {
+      if (isNarcissistic(i)) {
         console.log(i)
       }
     }
   }
-  narcissistics()
   //求阶乘
-  var palindrom = function(n) {
+  function factorial(n) {
     var result = 1
     for (var i = 2; i <= n; i++) {
       result *= i
     }
     return result
+  }
+  //判断一个数是否是回文数字
+  function ispalindrom (n) {//求反向排列数，再与n对比
+    var result = 0
+    var m = n
+    while (m > 0) {
+      var digit = m % 10
+      m = (m - digit) / 10
+      result = result * 10 + digit 
+    }
+    return result == n
+  }
+  function ispalindrom (n) {//对称位对比
+    var width = digitWidth(n)
+    for (var i = 1; i <= width / 2; i++) {
+      var a = Math.floor(n / power(10, i - 1)) % 10
+      var b = Math.floor(n / power(10, width - i)) % 10
+      if (a != b) {
+        return false
+      }
+    }
+    return true
   }
   //给年和月，计算这个月的第一天是星期几
   var weekday = function(year, month) {
@@ -1124,31 +1173,34 @@
     return false
   }
   //写一个函数求一个数是否为完全数（它的因子之和等于它自己）
-  var complete_number = function(n) {
-    if (n <= 0) {
+  function isCompleteNumber(n) {
+    var sum = 1
+    if (n == 1) {
       return false
-    } 
-    var sum = 0
-    for (var i = 1; i < n; i++) {
+    }
+    for (var i = 2; i * i <= n; i++) {
       if (n % i == 0) {
-        sum += i
+        var j = n / i
+        if (i == j) {
+          sum += i
+        } else {
+          sum += i
+          sum += j
+        }
       }
     }
-    if (sum == n) {
-      return true
-    }
-    return false
+    return sum == n
   }
   //数出1000以内的所有完全数
-  var complete_numbers = function() {
+  function completeNumbers() {
     for(var i = 1; i <= 1000; i++) {
-      if (complete_number(i)) {
+      if (isCompleteNumber(i)) {
         console.log(i)
       }
     }
   }
-  //判断素数
-  var prime = function(n) {
+  //判断素数                        
+  function isPrime(n) {
     if (n == 1) {
       return false
     }
@@ -1167,34 +1219,43 @@
     return true
   }
   //输出1000以内的素数
-  var primes = function() {
+  function primes() {
     for (var i = 1; i <= 1000; i++) {
-      if(prime(i)) {
+      if(isPrime(i)) {
         console.log(i)
       }
     }
   }
   //不使用隐式类型转换将一个数字转换为字符串
-  var itob = function(n) {
-    return '' + n
+  function itob(n) {
+    
   }
   //写函数求出两个数的最大公约数
-  var lcf = function(m, n) {
+  function lcf(m, n) {//普通求法
     if (m == 0 && n !=0) {
       return n
     }else if(n == 0 && m != 0) {
       return m
     }
     var min = Math.min(m, n)
-    for (var i = 1; i <= min; i++) {
+    for (var i = min; i >= 1; i--) {
       if (n % i == 0 && m % i == 0) {
-        var max = i
+        return i
       }
     }
-    return max
+  }
+  function lcf(m, n) {//辗转相减
+    while (m != 0 && n != 0) {
+      if (m > n) {
+        m = m - n
+      } else {
+        n = n - m
+      }
+    }
+    return m
   }
   //写函数求出两个数的最小公倍数
-  var lcm = function(m, n) {
+  function lcm(m, n) {//普通写法
     var result = 1
     var max = Math.max(m, n)
     for (var i = 2; max > 1; i++) {
@@ -1218,5 +1279,7 @@
     }
     return result
   }
-  console.log(lcm(36, 270))
+  function lcm(m, n) {//两个数的乘积等于lcf * lcm
+    return m * n / lcf (m, n)
+  }
 </script>
