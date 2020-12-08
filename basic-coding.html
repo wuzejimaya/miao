@@ -1068,8 +1068,11 @@
   function sqrt(n) {//牛顿法
     var x = n
     while (Math.abs(x * x - n) > 0.00000000001) {
-      var x = (x + n / x) / 2
-      // console.log(x)
+      var x1 = (x + n / x) / 2
+      if (x == x1) {//浮点数精度不够退出
+        break
+      }
+      x = x1
     }
     return x 
   }
@@ -1140,15 +1143,9 @@
     return true
   }
   //给年和月，计算这个月的第一天是星期几
-  var weekday = function(year, month) {
+  function weekday(year, month) {
     var day = 1
-    for (var i = 1; i < year; i++) {
-      if (isLeap(i)) {
-        day += 366
-      } else {
-        day += 365
-      }
-    } 
+    day += (year - 1) * 365 + Math.floor((year - 1) / 4) - Math.floor((year - 1) / 100) + Math.floor((year - 1) / 400)
     for (var i = 1; i < month; i++) {
       if (i == 4 || i == 6 || i == 9 || i == 11) {
         day += 30
@@ -1161,12 +1158,9 @@
       }
     }
     var weekday = day % 7
-    if (weekday == 0) {
-      return 7
-    }
     return weekday
   }
-  var isLeap = function(year) {
+  function isLeap(year) {
     if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
       return true
     } 
@@ -1227,9 +1221,48 @@
     }
   }
   //不使用隐式类型转换将一个数字转换为字符串
-  function itob(n) {
-    
+  function ntoc(n) {
+    if (n == 0) {
+      return "0"
+    }
+    if (n == 1) {
+      return "1"
+    }
+    if (n == 2) {
+      return "2"
+    }
+    if (n == 3) {
+      return "3"
+    }
+    if (n == 4) {
+      return "4"
+    }
+    if (n == 5) {
+      return "5"
+    }
+    if (n == 6) {
+      return "6"
+    }
+    if (n == 7) {
+      return "7"
+    }
+    if (n == 8) {
+      return "8"
+    }
+    if (n == 9) {
+      return "9"
+    }
   }
+  function itob(n) {
+    var result = ""
+    do {
+      var digit = n % 10
+      n = (n - digit) / 10
+      result = ntoc(digit) + result
+    } while (n > 0)
+    return result
+  }
+  itob(123456)
   //写函数求出两个数的最大公约数
   function lcf(m, n) {//普通求法
     if (m == 0 && n !=0) {
@@ -1251,6 +1284,14 @@
       } else {
         n = n - m
       }
+    }
+    return m
+  }
+  function lcf(m, n) {//辗转相除法，欧几里德算法
+    while (m != 0 && n != 0) {
+      var t = n
+      n = m % n
+      m = t
     }
     return m
   }
@@ -1282,4 +1323,5 @@
   function lcm(m, n) {//两个数的乘积等于lcf * lcm
     return m * n / lcf (m, n)
   }
+  
 </script>

@@ -7,7 +7,27 @@
   <style>
  
   </style>
-  
+  <script src="https://eloquentjavascript.net/2nd_edition/code/ancestry.js"></script>
+  <script>
+    var ancestry = JSON.parse(   ANCESTRY_FILE   )
+
+    function getYoungIn1924(ancestry) {
+
+    }
+    function getAllMale() {
+      let res = []
+      for (let i = 0; i < ancestry.length; i++) {
+        ancestry[i]
+      }
+    }
+    function map(ary,transform) {
+      var res = []
+      for (let i = 0; i < ary.length; i++) {
+        res.push(transform(ary[i]))
+      }
+      return res
+    }
+  </script>
 
 
 <script type="foo">
@@ -87,6 +107,215 @@
       couter++
     }
     return couter
+  }
+
+  function factor (n) {
+    if (n == 0) {
+      return 1
+    }
+    return n * factor (n - 1)
+  }
+  function pow (x, n) {
+    if (n == 0) {
+      return 1
+    } else if (n % 2 == 0) {
+      return pow (x, n * n / 4) 
+    } else {
+      return pow (x, (n - 1) * (n - 1) / 4)
+    }
+  }
+
+  function f(row, col) {
+    if (row == a.length - 1) {
+      return a[row][col]
+    }
+    return a[row][col] + Math.max(f(row + 1, col), f(row + 1, col + 1))
+  }
+  function unshift(ary, val) {
+    for (var i = ary.length - 1; i >= 0; i--) {
+      ary[i + 1] = ary[i]
+    }
+    ary[0] = val
+    return ary.length
+  }
+  function join(ary, str) {
+    for (var i = 0; i < str.length; i++) {
+      ary[i] = str[i]
+    }
+  }
+  function indexOf(ary, val) {
+    for (var i = 0; i < ary.length; i++) {
+      if (ary[i] == val) {
+        return i
+      }
+    }
+    return -1
+  }
+  function slice(ary, start, end = ary.length) {
+    var res =[]
+    for (var i = start; i < end; i++){
+      res.push(ary[i])
+    }
+    return res
+  }
+  function concat(a, b) {
+    var res = []
+    for (var i = 0; i < a.length; i++) {
+      res.push(a[i])
+    }
+    for (var i = 0; i < b.length; i++) {
+      a.push(b[i])
+    }
+    return res
+  }
+  function cloneDeep(obj) {
+    var res = {}
+    for (var a in obj) {
+      if (typeOf obj[a] == "object") {
+
+      }
+      res[a] = obj[a]
+    }
+  }
+  function includes(ary, val){
+    for (var i = 0; i < ary.length; i++) {
+      if (ary[i] == val) {
+        return i
+      } else {
+
+      }
+    }
+  }
+  function concat (ary) {
+    var res = []
+    for (var i = 0; i < arguments.length; i++) {
+      if (typeof arguments[i] == "subject") {
+        
+      } else {
+        res.push(arguments[i])
+      }
+    }
+  }
+  function ListNode(val, next) {
+    this.val = (val == undefined? 0: val)
+    this.next = (next == undefined? null: next)
+  }
+  function arrayToList (ary) {
+    if (ary.length == 0) {
+      return null
+    }
+    let head = new ListNode(ary[0]) 
+    let cur = head
+    for (let i = 1; i < ary.length; i++) {
+      cur.next = new ListNode(arr[i])
+      cur = cur.next
+    } 
+    return head
+  }
+  function arrayToList4(ary) {
+    if (ary.length == 0) {
+      return null
+    }
+    let head = new ListNode(ary[0]) 
+    head.next = arrayToList4(ary.slice(1))
+    return head
+  }
+  function listToArray(l) {
+    let array = []
+    while (l != null) {
+      array.push(l.val)
+      l = l.next
+    }
+    return array
+  }
+  function listToArray2 (l) {
+    if (l == null) {
+      return []
+    }
+    let tailArray = listToArray2(l.next)
+    tailArray.unshift(l.val)
+    return tailArray
+  }
+  function append(val, head) {
+    let node = createNode(val)
+    if (!head) {
+      return node
+    }
+    let cur = head
+    while (cur.next != null) {
+      cur = cur.next
+    }
+    cur.next = node
+    return head
+  }
+  function nth(l, idx) {
+    if (idc <= 0) {
+      return null
+    } 
+    if (!l) {
+      return null
+    }
+    while (l.next != null && idx > 1) {
+      l = l.next
+      idx--
+    }
+    if (idx == 1) {
+      return l.val
+    } else {
+      return null
+    }
+  }
+  function insert2(head, val, idx) {
+    if (!head) {
+      return creatNode(val)
+    }
+    if (idx == 0) {
+      let node = creatNode(val)
+      node.next = head
+      return node
+    }
+    indert2(head.next, val, idx - 1)
+    return head
+  }
+  function selectSort(ary) {
+    for (let i = 0; i < ary.length - 1; i++) {
+      let minIndex = i
+      for (let j = i; j < ary.length; j++) {
+        if (ary[j] < ary[minIndex]) {
+          minIndex = j
+        }
+      }
+      swap(ary, minIndex, i)
+    }
+  }
+  function quickSort(ary) {
+    let randomIndex = Math.floor(Math.random() * ary.length)
+    let left = []
+    let middle = []
+    let right = []
+    for (let i = 0; i < ary.length; i++) {
+      if (ary[i] == ary[randomIndex]) {
+        middle.push(ary[i])
+      } else if (ary[i] < ary[randomIndex]) {
+        left.push(ary[i])
+      } else {
+        right.push(ary[i])
+      }
+    }
+
+  }
+  function keys(obj) {
+    let res = []
+    for (let ket in obj) {
+      res.push(key)
+    }
+    return res
+    
+  }
+  function logArray(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      console.log(arr[i])
+    }
   }
 </script>
 </head>
