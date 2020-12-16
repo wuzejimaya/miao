@@ -526,6 +526,8 @@ var wuzejimaya = function () {
     join,
     last,
     lastIndexOf,
+    nth,
+    pull,
     reverse,
     sortedIndex,
     every,
