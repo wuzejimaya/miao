@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>chapter 6</title>
+</head>
+<body>
+  <script>
+    /*
+      {
+        constructor: Rabbit,
+        dance() {
+
+        },
+        jump() {
+
+        },
+        eat() {
+
+        },
+        sleep() {
+
+        }
+      }
+      作业：实现f，让f返回一个新对象，其属性集合跟其参数相同，但都不可枚举
+    */
+    function nonenumerable(obj) {
+     let res = {}
+     for (let key in obj) {
+       Object.defineProperty(res, key, {value: obj[key]})
+     }
+     return res
+   }
+   /*
+      作业：实现一个类似console.table的函数table，接收一个收由对象组成的数组，返回一个html表格的字符串。
+      table([{a:1,b:2,c:3}, {a:5,b:8,c:12}, {b:3,c:10,z:88}])
+   */
+    function table(data) {
+      let res =`<style>
+                    table {
+                      width: 50%;
+                      padding: 12px;
+                      border-collapse: collapse;
+                    }
+                    th,td {
+                      border: 1px solid black;
+                    }
+                </style>
+                <table>`
+      let set = new Set()
+      data.forEach(e => {
+        for (let key in e) {
+          set.add(key)
+        }
+      });
+      let keys = set.keys(), head = "<tr>\n"
+      for (let key of keys) {
+        head += "<th>" + key + "</th>" + "\n"
+      }
+      head += "</tr>"
+      let body = ""
+      data.forEach(e => {
+        body += "<tr>\n"
+        keys = set.keys()
+        for (let key of keys) {
+          if (key in e) {
+            body += "<td>" + e[key] + "</td>" + "\n"
+          } else {
+            body += "<td>" + "</td>" + "\n"
+          }
+        }
+        body += "</tr>\n"
+      })
+      res += head + body + "</table>"
+      document.write(res)
+   }
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>画图</title>
+  <style>
+    canvas {
+      /* border: 2px solid #f0f; */
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas width="400" height="300"></canvas>
+</body>
+<script src = "lena.js"></script>
+<script>
+  var canvas = document.querySelector('canvas')
+  canvas.style.imageRendering = 'pixelated'
+  var ctx = canvas.getContext('2d')
+
+  function dot(x, y, color = 'black') {
+    x = x | 0
+    y = y | 0
+    ctx.fillStyle = color
+    ctx.fillRect(x, y, 1, 1)
+  }
+
+  function line(x1, y1, x2, y2) {
+    ctx.strokeStyle = 'black'
+    ctx.moveTo(x1, y1)
+    ctx.lineTo(x2, y2)
+    ctx.stroke()
+  }
+  /*
+   以下地址（http://xieranmaya.coding.me/other/lena.js）的文件内声明了一个叫lena的变量，其为一个二维数组，二维数组中的每个元素为一个长度为3的数组，代表一个点的颜色，，每个数分别为R，G，B的十进制表示。整个二维数组表达一张图中的每个点的颜色。将该文件加载到一个页面中，使用JS代码将这张图绘制出来。然后对这张图片的每个点执行一个矩阵变幻并绘制变幻结果。
+   */
+</script>
+<script>
+  for (let i = 0; i < lena.length; i++) {
+    for (let j = 0; j < lena[i].length; j++) {
+      let ary = lena[i][j]
+      let color = 'rgb(' + ary[0] + ',' + ary[1] + ',' + ary[2] + ')'
+      dot(j, i, color)
+    }
+  }
+</script>
+</html>

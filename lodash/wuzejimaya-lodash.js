@@ -1,4 +1,5 @@
 var wuzejimaya = function () {
+
   function chunk(array, size = 1) {
     let res = []
     for (let i = 0; i < array.length;) {
@@ -10,52 +11,85 @@ var wuzejimaya = function () {
     }
     return res
   }
+
   function compact(array) {
-    let res = []
-    for (let i = 0; i < array.length; i++) {
-      if (array[i] !== false && array[i] !== null && array[i] !== 0 &&
-        array[i] !== "" && array[i] !== undefined && array[i] === array[i]) {
-        res.push(array[i])
-      }
+    return array.filter(it => it)
+  }
+
+  function difference(array, ...values) {
+    let diff = [].concat(...values)
+    return array.filter(e => !diff.includes(e))
+  }
+
+  function differenceBy(array, ...values) {
+    let iteratee = values[values.length - 1]
+    if (Array.isArray(iteratee)) return difference(array, ...values)
+    values.pop()
+    let diffs = [].concat(...values)
+    if (typeof iteratee == 'function') {
+      return array.filter(e => diffs.every(diff => iteratee(diff) != iteratee(e)))
+    } else {
+      return array.filter(e => diffs.every(diff => diff[iteratee] != e[iteratee]))
     }
-    return res
   }
-  function join(array, separator = ',') {
-    let res = ''
-    for (let i = 0; i < array.length; i++) {
-      res += array[i] + '' + separator
-    }
-    return res.slice(0, res.length - 1)
+
+  function differenceWith(arr, values, comparator) {
+    return arr.filter(e => values.every(value => !comparator(value, e)))
   }
-  function last(array) {
-    return array[array.length - 1]
-  }
-  function lastIndexOf(array, value, fromIndex = array.length - 1) {
-    fromIndex = fromIndex > array.length - 1 ? array.length - 1 : fromIndex
-    fromIndex = fromIndex < 0 ? fromIndex + array.length : fromIndex
-    for (let i = fromIndex; i >= 0; i--) {
-      if (array[i] === value) return i
-    }
-    return -1
-  }
+
   function drop(array, n = 1) {
     if (n <= 0) return array.slice(0)
     return array.slice(n)
   }
+
   function dropRight(array, n = 1) {
-    let res = [], right
-    if (n < 0) {
-      right = array.length
-    } else if (n > array.length) {
-      right = 0
-    } else {
-      right = array.length - n
-    }
-    for (let i = 0; i < right; i++) {
-      res.push(array[i])
-    }
-    return res
+    return array.filter((_, idx) => idx < array.length - n)
   }
+  
+  function dropRightWhile(ary, predicate) {
+    let i = ary.length - 1
+    if (typeof predicate == "function") {
+      for (; i >= 0; i--) {
+        if (!predicate(ary[i])) break
+      }
+    } else if (Array.isArray(predicate)) {
+      for (; i >= 0; i--) {
+        if (ary[i][predicate[0]] != predicate[1]) break
+      }
+    } else if (typeof predicate == "object") {
+      for (; i >= 0; i--) {
+        if (!deepEqual(ary[i], predicate)) break
+      }
+    } else if (typeof predicate == "string") {
+      for (; i >= 0; i--) {
+        if (ary[i].hasOwnProperty(predicate)) break
+      }
+    }
+    return ary.slice(0, i + 1)
+  }
+
+  function dropWhile(ary, predicate) {
+    let i = 0
+    if (typeof predicate == "function") {
+      for (; i < ary.length; i++) {
+        if (!predicate(ary[i])) break
+      }
+    } else if (Array.isArray(predicate)) {
+      for (; i < ary.length; i++) {
+        if (ary[i][predicate[0]] != predicate[1]) break
+      }
+    } else if (typeof predicate == "object") {
+      for (; i < ary.length; i++) {
+        if (!deepEqual(ary[i], predicate)) break
+      }
+    } else if (typeof predicate == "string") {
+      for (; i < ary.length; i++) {
+        if (ary[i].hasOwnProperty(predicate)) break
+      }
+    }
+    return ary.slice(i)
+  }
+
   function fill(array, value, start = 0, end = array.length) {
     if (start < 0 && start >= - array.length) {
       start = start + array.length
@@ -76,6 +110,7 @@ var wuzejimaya = function () {
     }
     return array
   }
+
   function findIndex(array, predicate, fromIndex = 0) {
     if (fromIndex < 0) return -1
     if (typeof predicate == 'function') {
@@ -101,6 +136,7 @@ var wuzejimaya = function () {
     }
     return -1
   }
+
   function findLastIndex(array, predicate, fromIndex = array.length - 1) {
     if (typeof predicate == 'function') {
       for (let i = fromIndex; i >= 0; i--) {
@@ -125,19 +161,11 @@ var wuzejimaya = function () {
     }
     return -1
   }
+
   function flatten(array) {
-    let res = []
-    for (let i = 0; i < array.length; i++) {
-      if (Array.isArray(array[i])) {
-        for (let j = 0; j < array[i].length; j++) {
-          res.push(array[i][j])
-        }
-      } else {
-        res.push(array[i])
-      }
-    }
-    return res
+    return flattenDepth(array)
   }
+
   function flattenDeep(array) {
     let res = []
     for (let i = 0; i < array.length; i++) {
@@ -152,6 +180,7 @@ var wuzejimaya = function () {
     }
     return res
   }
+
   function flattenDepth(array, depth = 1) {
     let res = []
     for (let i = 0; i < array.length; i++) {
@@ -166,6 +195,7 @@ var wuzejimaya = function () {
     }
     return res
   }
+
   function fromPairs(pairs) {
     let res = {}
     for (let i = 0; i < pairs.length; i++) {
@@ -173,9 +203,11 @@ var wuzejimaya = function () {
     }
     return res
   }
+
   function head(array) {
     return array[0]
   }
+
   function indexOf(array, value, fromIndex = 0) {
     if (fromIndex < 0) fromIndex += array.length
     for (let i = fromIndex; i < array.length; i++) {
@@ -183,9 +215,63 @@ var wuzejimaya = function () {
     }
     return -1
   }
+
   function initial(array) {
     return array.slice(0, array.length - 1)
   }
+
+  function intersection(...arrays) {
+    return arrays[0].filter(e => arrays.every(array => array.some(it => it == e)))
+  }
+
+  function intersectionBy(...arrays) {
+    let iteratee = arrays[arrays.length - 1]
+    arrays.pop()
+    if (typeof iteratee == 'function')
+      return arrays[0].filter(e => arrays.every(array => array.some(
+        it => iteratee(it) == iteratee(e))))
+    else 
+      return arrays[0].filter(e => arrays.every(array => array.some(
+        it => it[iteratee] == e[iteratee])))
+  }
+
+  function intersectionWith(...arrays) {
+    let comparator = arrays[arrays.length - 1]
+    arrays.pop()
+    return arrays[0].filter(e => arrays.every(array => array.some(
+        it => comparator(it, e))))
+  }
+
+  function join(array, separator = ',') {
+    let res = ''
+    for (let i = 0; i < array.length; i++) {
+      res += array[i] + '' + separator
+    }
+    return res.slice(0, res.length - 1)
+  }
+
+  function last(array) {
+    return array[array.length - 1]
+  }
+
+  function lastIndexOf(array, value, fromIndex = array.length - 1) {
+    fromIndex = fromIndex > array.length - 1 ? array.length - 1 : fromIndex
+    fromIndex = fromIndex < 0 ? fromIndex + array.length : fromIndex
+    for (let i = fromIndex; i >= 0; i--) {
+      if (array[i] === value) return i
+    }
+    return -1
+  }
+
+  function nth(array, n = 0) {
+    return array[n > 0? n : n + array.length]
+  }
+
+  function pull(array, ...values) {
+    return array.filter(it => !values.includes(it))
+  }
+
+
   function reverse(array) {
     let left = 0, right = array.length - 1
     while (left < right) {
@@ -366,14 +452,64 @@ var wuzejimaya = function () {
     }
     return sum
   }
+  function deepEqual(a, b) {
+    if (a === b) return true//绝对相等，则返回真
+    if (a !== a && b !== b) return true//特殊情况，NaN !== NaN，两个都是NAN时，返回真 
+    let typeA = typeof(a)
+    let typeB = typeof(b)
+    if (typeA != typeB) {//类型不相同，直接返回假
+      return false
+    } else {//类型相同
+      if (typeA != 'object') {//都是基本数据类型，直接判断是否相等
+        return a === b
+      } else {//都不是基本数据类型，可能是数组，或者对象
+        if (Array.isArray(a) != Array.isArray(b)) {//一个为数组一个为对象，直接返回假
+          return false
+        } else {//两个都是数组或者两个都是对象
+          if (Array.isArray(a)) {//两个都是数组
+            if (a.length != b.length) {//如果两个数组长度不同，直接返回假
+              return false
+            } else {
+              for (let i = 0; i < a.length; i++) {
+                if (!deepEqual(a[i], b[i])){//递归对比每一项，一项不同，则返回假
+                  return false
+                }
+              }
+              return true
+            }
+          } else {//两个都是对象
+            if (a.length != b.length) {//如果两个对象长度不同，直接返回假
+              return false
+            } else {
+              let keysA = Object.keys(a), keysB = Object.keys(b)
+              let keys = Array.from(new Set(keysA.concat(keysB)))//a和b的属性合并去重，避免重复对比
+              if (keys.length != keysA.length) {//长度不同，直接返回假
+                return false
+              } else {
+                for (let i = 0; i < keys.length; i++) {
+                  let key = keys[i]
+                  if (!(deepEqual(a[key], b[key]))) {//递归对比每一项，一项不同，则返回假
+                    return false
+                  }
+                }
+                return true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   return {
     chunk,
     compact,
-    join,
-    last,
-    lastIndexOf,
+    difference,
+    differenceBy,
+    differenceWith,
     drop,
     dropRight,
+    dropRightWhile,
+    dropWhile,
     fill,
     findIndex,
     findLastIndex,
@@ -384,6 +520,12 @@ var wuzejimaya = function () {
     head,
     indexOf,
     initial,
+    intersection,
+    intersectionBy,
+    intersectionWith,
+    join,
+    last,
+    lastIndexOf,
     reverse,
     sortedIndex,
     every,

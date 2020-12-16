@@ -317,6 +317,88 @@
       console.log(arr[i])
     }
   }
+  function find(ary, predicate) {
+    for (let i = 0; i < ary.length; i++) {
+      if (predicate(ary[i])) return ary[i]
+    }
+  }
+  function every(ary, test) {
+    for (let i = 0; i < ary.length; i++) {
+      if (!test(ary[i]), i, ary) return false 
+    }
+    return true
+  }
+
+  function f(ancestry) {
+    let obj = {}
+    for (let i = 0; i < ancestry.length; i++) {
+      obj[ancestry[i].name] = ancestry[i]
+    }
+    return obj
+  }
+
+  geneWithPvh(father) / 2 + geneWithPvh(mother) / 2
+  function bind(f) {
+    let a = 3, b = 5
+    return a * b + c
+  }
+  function treeToArray(tree) {
+    let array = []
+    array[0] = tree.val
+    treeToArray(tree.left)
+    treeToArray(tree.right)
+
+  }
+  function treeToCondensedArray(root) {
+    let array = [], queue = [root]
+    if (!root) return array
+    while (queue.length > 0) {
+      let node = queue.shift()
+      if (node) {
+        array.push(node.val)
+        queue.push(node.left)
+        quue.push(node.right)
+      } else {
+        array.push(null)
+      }
+    }
+    return array
+  }
+  function insertIntoBST(tree, val) {
+    if (!tree) return createTreeNode(val)
+    if (val < tree.val) insertIntoBST(tree.left, val)
+    else insertIntoBST(tree.rigth, val)
+    return tree                         
+  }
+  function bind(f, thisArg, ...fixedArgs) {
+    return function(thisArg) {
+      return f(...fixedArgs)
+    }
+  }
+  function f(ary) {
+    return ary.slice(1,4).concat(ary.slice(-4, -1))
+  }
+  function rowHeights(rows) {
+    return rows.map(row => {
+      return row.reduce((max, cell) =>{
+        return Math.max(max, cell.minHeight())
+      }, 0)
+    })
+  }
+  function colWidths(rows) {
+    return rows[0].map((cell, i) => {
+      return rows.reduce(function(max, row) {
+        return Math.max(max, row[i].minWidth())
+      }, 0)
+    })
+  }
+  function map (arr, mapper, thisArg = window) {
+    let res = []
+    for (let i = 0; i < arr.length; i++) {
+      res.push(mapper.call(thisArg, arr[i], i, arr))
+    }
+    return res
+  }
 </script>
 </head>
 <body>
