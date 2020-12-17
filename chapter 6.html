@@ -31,7 +31,7 @@
        Object.defineProperty(res, key, {value: obj[key]})
      }
      return res
-   }
+    }
    /*
       作业：实现一个类似console.table的函数table，接收一个收由对象组成的数组，返回一个html表格的字符串。
       table([{a:1,b:2,c:3}, {a:5,b:8,c:12}, {b:3,c:10,z:88}])
@@ -75,6 +75,73 @@
       res += head + body + "</table>"
       document.write(res)
    }
-  </script>
+   /*
+    //复数
+    var a = new Complex(5, 3)// 5 + 3i
+    // a.real -> 5
+    // a.imag -> 3
+    var b = new Complex(3, -2) // 3 - 2i
+
+    var c = a.minus(b)   // 2 + 5i
+    var d = a.plus(b)  // 8 + i
+    var e = d.multiple(c)
+    var f = e.division(a)
+
+    a.toString() // '5 + 3i'
+
+
+    var x = new Complex('3 + 2i')
+    作业：实现一个Complex类
+   */
+    function Complex(real, imagin) {
+      this.real = real
+      this.imagin = imagin
+    }
+
+    Complex.prototype.minus = function(obj) {
+      return new Complex(this.real - obj.real, this.imagin - obj.imagin)
+    }
+
+    Complex.prototype.plus = function(obj) {
+      return new Complex(this.real + obj.real, this.imagin + obj.imagin)
+    }
+
+    Complex.prototype.multiple = function(obj) {
+      return new Complex(this.real * obj.real - this.imagin * obj.imagin, 
+                        this.real *  obj.imagin + this.imagin * obj.real)
+    }
+
+    Complex.prototype.division = function(obj) {
+      return new Complex((this.real * obj.real + this.imagin * obj.imagin) / (obj.real ** 2 + obj.imagin ** 2),
+                        (this.imagin * obj.real - this.real *  obj.imagin) / (obj.real ** 2 + obj.imagin ** 2))
+    }
+
+    Complex.prototype.toString = function() {
+      if (this.imagin > 0)
+        return this.real + " " + "+" + " " + Math.abs(this.imagin) + "i"
+      else 
+      return this.real + " " + "-" + " " + Math.abs(this.imagin) + "i"
+    }
+   /*
+    实现一个Vector类
+   */
+    function Vector(x, y) {
+      this.x = x
+      this.y = y
+    }
+    Vector.prototype.plus = function (obj) {
+      return new Vector(this.x + obj.x, this.y + obj.y)
+    }
+
+    Vector.prototype.minus = function (obj) {
+      return new Vector(this.x - obj.x, this.y - obj.y)
+    }
+
+    Object.defineProperty(Vector.prototype, "length", {
+      get: function() {
+        return Math.sqrt(this.x ** 2 + this.y ** 2)
+      }
+    })
+    </script>
 </body>
 </html>

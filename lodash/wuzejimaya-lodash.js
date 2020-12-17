@@ -22,15 +22,9 @@ var wuzejimaya = function () {
   }
 
   function differenceBy(array, ...values) {
-    let iteratee = values[values.length - 1]
-    if (Array.isArray(iteratee)) return difference(array, ...values)
-    values.pop()
+    let iteratee = transform(values.pop())
     let diffs = [].concat(...values)
-    if (typeof iteratee == 'function') {
-      return array.filter(e => diffs.every(diff => iteratee(diff) != iteratee(e)))
-    } else {
-      return array.filter(e => diffs.every(diff => diff[iteratee] != e[iteratee]))
-    }
+    return array.filter(e => diffs.every(diff => iteratee(diff) != iteratee(e)))
   }
 
   function differenceWith(arr, values, comparator) {
@@ -225,14 +219,9 @@ var wuzejimaya = function () {
   }
 
   function intersectionBy(...arrays) {
-    let iteratee = arrays[arrays.length - 1]
-    arrays.pop()
-    if (typeof iteratee == 'function')
-      return arrays[0].filter(e => arrays.every(array => array.some(
-        it => iteratee(it) == iteratee(e))))
-    else 
-      return arrays[0].filter(e => arrays.every(array => array.some(
-        it => it[iteratee] == e[iteratee])))
+    let iteratee = transform(arrays.pop())
+    return arrays[0].filter(e => arrays.every(array => array.some(
+      it => iteratee(it) == iteratee(e))))
   }
 
   function intersectionWith(...arrays) {
@@ -438,21 +427,126 @@ var wuzejimaya = function () {
   }
 
   function unionBy(...arrays) {
-    let iteratee = arrays[arrays.length - 1]
+    let iteratee = transform(arrays.pop())
+    let array = [].concat(...arrays), res = []
+    array.forEach(it => {
+      if (res.every(e => iteratee(e) != iteratee(it))) res.push(it)
+    })
+    return res
+  }
+
+  function unionWith(...arrays) {
+    let comparator = arrays[arrays.length - 1]
     arrays.pop()
     let array = [].concat(...arrays), res = []
-    if (isFunction(iteratee)) {
-      array.forEach(it => {
-        if (res.every(e => iteratee(e) != iteratee(it))) res.push(it)
-      })
-    } else if (isString(iteratee)) {
-      array.forEach(it => {
-        if (res.every(e => e[iteratee] != it[iteratee])) res.push(it)
-      })
+    array.forEach(it => {
+      if (res.every(e => !comparator(e, it))) res.push(it)
+    })
+    return res
+  }
+
+  function uniq(array) {
+    let res = []
+    array.forEach(it => {
+      if (res.every(e => e != it)) res.push(it)
+    })
+    return res
+  }
+
+  function uniqBy(array, iteratee) {
+    let res = []
+    iteratee = transform(iteratee)
+    array.forEach(it => {
+      if (res.every(e => iteratee(e) != iteratee(it))) res.push(it)
+    })
+    return res
+  }
+
+  function uniqWith(array, comparator) {
+    let res = []
+    array.forEach(it => {
+      if (res.every(e => !comparator(e, it))) res.push(it)
+    })
+    return res
+  }
+
+  function unzip(array) {
+    return array[0].map((_, idx) => array.map(it => it[idx]))
+  }
+
+  function unzipWith(array, iteratee) {
+    return array[0].map((_, idx) => iteratee(...(array.map(it => it[idx]))))
+  }
+
+  function without(array, ...values) {
+    return array.filter(it => !values.includes(it))
+  }
+
+  function xor(...arrays) {
+    let map = new Map(), array = flatten(arrays)
+    array.forEach((it) => {
+        if (map.has(it)) {
+            map.set(it, map.get(it) + 1)
+        } else {
+            map.set(it, 1)
+        }
+    });
+    return array.filter(it => map.get(it) == 1)
+  }
+
+  function xorBy(...arrays) {
+    let iteratee = transform(arrays.pop())
+    let map = new Map(), array = flatten(arrays)
+    array.forEach((it) => {
+        if (map.has(iteratee(it))) {
+            map.set(iteratee(it), map.get(it) + 1)
+        } else {
+            map.set(iteratee(it), 1)
+        }
+    });
+    return array.filter(it => map.get(iteratee(it)) == 1)
+  }
+
+  function xorWith(...arrays) {
+    let comparator = arrays.pop(), objects = arrays[0], others = arrays[1]
+    let array = flatten(arrays)
+    return objects.filter(it => others.every(e => !comparator(e, it))).concat(others.filter(it => objects.every(e => !comparator(e, it))))
+  }
+
+  function zip(...arrays) {
+    return arrays[0].map((_, idx) => arrays.map(it => it[idx]))
+  }
+
+  function zipObject(props = [], values = []) {
+    let res = {}
+    props.forEach((it, idx) => {
+      res[it] = values[idx]
+    })
+    return res
+  }
+
+  function zipObjectDeep(props = [], values = []) {
+    let array = []
+    props.forEach((it, idx) => {
+      let tem = {}
+      tem[it[it.length - 1]] = values[idx]
+      array.push(tem)
+    })
+    let path = props[0].split('.')
+    for (let i = path.length - 2; i >= 0; i--) {
+      var res = {}
+      res[path[i][0]] = array
+      array = res
     }
     return res
   }
 
+  function zipWith(...arrays) {
+    let iteratee = arrays.pop()
+    return zip(...arrays).map(it => iteratee(...it))
+  }
+
+  
   function every(collection, predicate) {
     if (typeof predicate == 'function') {
       for (let i = 0; i < collection.length; i++) {
@@ -677,6 +771,14 @@ var wuzejimaya = function () {
     if (Object.prototype.toString.call(predicate) === '[object String]') return true
     return false
   }
+  function transform(iteratee) {
+    if (isString(iteratee)) {
+      return function(obj) {
+        return obj[iteratee]
+      }
+    }
+    return iteratee
+  }
   
   return {
     chunk,
@@ -725,6 +827,20 @@ var wuzejimaya = function () {
     takeWhile,
     union,
     unionBy,
+    unionWith,
+    uniq,
+    uniqBy,
+    uniqWith,
+    unzip,
+    unzipWith,
+    without,
+    xor,
+    xorBy,
+    xorWith,
+    zip,
+    zipObject,
+    zipObjectDeep,
+    zipWith,
     every,
     filter,
     find,
