@@ -271,6 +271,17 @@ var wuzejimaya = function () {
     return array.filter(it => !values.includes(it))
   }
 
+  function pullAll(array, ...values) {
+    return array.filter(it => !values[0].includes(it))
+  }
+
+  function pullAllBy(array, values, iteratee) {
+    return array.filter(obj => values.every(value => value[iteratee] != obj[iteratee]))
+  }
+
+  function pullAllWith(array, values, comparator) {
+    return array.filter(obj => values.every(value => !comparator(value, obj)))
+  }
 
   function reverse(array) {
     let left = 0, right = array.length - 1
@@ -279,11 +290,13 @@ var wuzejimaya = function () {
     }
     return array
   }
+
   function swap(array, i, j) {
     let tem = array[i]
     array[i] = array[j]
     array[j] = tem
   }
+
   function sortedIndex(array, value) {
     let left = 0, right = array.length - 1
     while (right != left) {
@@ -293,6 +306,153 @@ var wuzejimaya = function () {
     }
     return value > array[left] ? left + 1 : left
   }
+
+  function sortedIndexBy(array, value, iteratee) {
+    let left = 0, right = array.length - 1
+    if (isFunction(iteratee)) {
+      while (right != left) {
+        let mid = (left + right) >> 1
+        if (iteratee(value) > iteratee(array[mid])) left = mid + 1
+        else right = mid
+      }
+    } else {
+        while (right != left) {
+          let mid = (left + right) >> 1
+          if (value[iteratee] > array[mid][iteratee]) left = mid + 1
+          else right = mid
+        }
+    }
+    return value > array[left] ? left + 1 : left
+  }
+
+  function sortedIndexOf(array, value) {
+    return sortedIndex(array, value)
+  }
+
+  function sortedLastIndex(array, value) {
+    let left = 0, right = array.length - 1
+    while (right != left) {
+      let mid = (left + right) >> 1
+      if (value >= array[mid]) left = mid + 1
+      else right = mid
+    }
+    return value > array[left] ? left + 1 : left
+  }
+
+  function sortedLastIndexBy(array, value, iteratee) {
+    let left = 0, right = array.length - 1
+    if (isFunction(iteratee)) {
+      while (right != left) {
+        let mid = (left + right) >> 1
+        if (iteratee(value) >= iteratee(array[mid])) left = mid + 1
+        else right = mid
+      }
+    } else {
+        while (right != left) {
+          let mid = (left + right) >> 1
+          if (value[iteratee] >= array[mid][iteratee]) left = mid + 1
+          else right = mid
+        }
+    }
+    return value > array[left] ? left + 1 : left
+  }
+
+  function sortedLastIndexOf(array, value) {
+    return sortedLastIndex(array, value) - 1
+  }
+
+  function sortedUniq(array) {
+    let res = []
+    array.forEach(e => {
+      if (!res.includes(e)) res.push(e)
+    })
+    return res
+  }
+
+  function sortedUniqBy(array, iteratee) {
+    let res = []
+    array.forEach(e => {
+      if (res.every(it => iteratee(e) != iteratee(it))) res.push(e)
+    })
+    return res
+  }
+
+  function tail(array) {
+    return array.slice(1)
+  }
+
+  function take(array, n = 1) {
+    return array.slice(0, n)
+  }
+  
+  function takeRight(array, n = 1) {
+    return array.slice(array.length - (n > array.length ? array.length : n))
+  }
+
+  function takeRightWhile(array, predicate) {
+    let i = array.length - 1
+    if (isFunction(predicate)) {
+      for (; i >= 0; i--) {
+        if (!predicate(array[i])) break
+      }
+    } else if (isObject(predicate)) {
+      for (; i >= 0; i--) {
+        if (!deepEqual(array[i], predicate)) break
+      }
+    } else if (isArray(predicate)) {
+      for (; i >= 0; i--) {
+        if (array[i][predicate[0]] != predicate[1]) break
+      }  
+    } else if (isString(predicate)) {
+      for (; i >= 0; i--) {
+        if (!array[i][predicate]) break
+      }  
+    }
+    return array.slice(i + 1)
+  }
+
+  function takeWhile(array, predicate) {
+    let i = 0
+    if (isFunction(predicate)) {
+      for (; i < array.length; i++) {
+        if (!predicate(array[i])) break
+      }
+    } else if (isObject(predicate)) {
+      for (; i < array.length; i++) {
+        if (!deepEqual(array[i], predicate)) break
+      }
+    } else if (isArray(predicate)) {
+      for (; i < array.length; i++) {
+        if (array[i][predicate[0]] != predicate[1]) break
+      }  
+    } else if (isString(predicate)) {
+      for (; i < array.length; i++) {
+        if (!array[i][predicate]) break
+      }  
+    }
+    return array.slice(0, i)
+  }
+
+  function union(...arrays) {
+    return [...new Set([].concat(...arrays))]
+  }
+
+  function unionBy(...arrays) {
+    let iteratee = arrays[arrays.length - 1]
+    arrays.pop()
+    let array = [].concat(...arrays), res = []
+    if (isFunction(iteratee)) {
+      array.forEach(it => {
+        if (res.every(e => iteratee(e) != iteratee(it))) res.push(it)
+      })
+    } else if (isString(iteratee)) {
+      array.forEach(it => {
+        if (res.every(e => e[iteratee] != it[iteratee])) res.push(it)
+      })
+    }
+    return res
+  }
+
   function every(collection, predicate) {
     if (typeof predicate == 'function') {
       for (let i = 0; i < collection.length; i++) {
@@ -500,6 +660,24 @@ var wuzejimaya = function () {
       }
     }
   }
+  
+  function isArray(predicate) {
+    if (Object.prototype.toString.call(predicate) === '[object Array]') return true
+    return false
+  }
+  function isFunction(predicate) {
+    if (Object.prototype.toString.call(predicate) === '[object Function]') return true
+    return false
+  }
+  function isObject(predicate) {
+    if (Object.prototype.toString.call(predicate) === '[object Object]') return true
+    return false
+  }
+  function isString(predicate) {
+    if (Object.prototype.toString.call(predicate) === '[object String]') return true
+    return false
+  }
+  
   return {
     chunk,
     compact,
@@ -528,8 +706,25 @@ var wuzejimaya = function () {
     lastIndexOf,
     nth,
     pull,
+    pullAll,
+    pullAllBy,
+    pullAllWith,
     reverse,
     sortedIndex,
+    sortedIndexBy,
+    sortedIndexOf,
+    sortedLastIndex,
+    sortedLastIndexBy,
+    sortedLastIndexOf,
+    sortedUniq,
+    sortedUniqBy,
+    tail,
+    take,
+    takeRight,
+    takeRightWhile,
+    takeWhile,
+    union,
+    unionBy,
     every,
     filter,
     find,
