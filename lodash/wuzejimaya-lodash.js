@@ -43,44 +43,18 @@ var wuzejimaya = function () {
   
   function dropRightWhile(ary, predicate) {
     let i = ary.length - 1
-    if (typeof predicate == "function") {
-      for (; i >= 0; i--) {
-        if (!predicate(ary[i])) break
-      }
-    } else if (Array.isArray(predicate)) {
-      for (; i >= 0; i--) {
-        if (ary[i][predicate[0]] != predicate[1]) break
-      }
-    } else if (typeof predicate == "object") {
-      for (; i >= 0; i--) {
-        if (!deepEqual(ary[i], predicate)) break
-      }
-    } else if (typeof predicate == "string") {
-      for (; i >= 0; i--) {
-        if (ary[i].hasOwnProperty(predicate)) break
-      }
+    predicate = transform(predicate)
+    for (; i >= 0; i--) {
+      if (!predicate(ary[i])) break
     }
     return ary.slice(0, i + 1)
   }
 
   function dropWhile(ary, predicate) {
     let i = 0
-    if (typeof predicate == "function") {
-      for (; i < ary.length; i++) {
-        if (!predicate(ary[i])) break
-      }
-    } else if (Array.isArray(predicate)) {
-      for (; i < ary.length; i++) {
-        if (ary[i][predicate[0]] != predicate[1]) break
-      }
-    } else if (typeof predicate == "object") {
-      for (; i < ary.length; i++) {
-        if (!deepEqual(ary[i], predicate)) break
-      }
-    } else if (typeof predicate == "string") {
-      for (; i < ary.length; i++) {
-        if (ary[i].hasOwnProperty(predicate)) break
-      }
+    predicate = transform(predicate)
+    for (; i < ary.length; i++) {
+      if (!predicate(ary[i])) break
     }
     return ary.slice(i)
   }
@@ -108,51 +82,17 @@ var wuzejimaya = function () {
 
   function findIndex(array, predicate, fromIndex = 0) {
     if (fromIndex < 0) return -1
-    if (typeof predicate == 'function') {
-      for (let i = fromIndex; i < array.length; i++) {
-        if (predicate(array[i])) return i
-      }
-    } else if (Array.isArray(predicate)) {
-      for (let i = fromIndex; i < array.length; i++) {
-        if (array[i][predicate[0]] == predicate[1]) return i
-      }
-    } else if (typeof predicate == 'object') {
-      for (let i = fromIndex; i < array.length; i++) {
-        let flag = true
-        for (let key in predicate) {
-          if (predicate[key] != array[i][key]) flag = false
-        }
-        if (flag) return i
-      }
-    } else if (typeof predicate == 'string') {
-      for (let i = fromIndex; i < array.length; i++) {
-        if (array[i][predicate]) return i
-      }
+    predicate = transform(predicate)
+    for (let i = fromIndex; i < array.length; i++) {
+      if (predicate(array[i])) return i
     }
     return -1
   }
 
   function findLastIndex(array, predicate, fromIndex = array.length - 1) {
-    if (typeof predicate == 'function') {
-      for (let i = fromIndex; i >= 0; i--) {
-        if (predicate(array[i])) return i
-      }
-    } else if (Array.isArray(predicate)) {
-      for (let i = fromIndex; i >= 0; i--) {
-        if (array[i][predicate[0]] == predicate[1]) return i
-      }
-    } else if (typeof predicate == 'object') {
-      for (let i = fromIndex; i >= 0; i--) {
-        let flag = true
-        for (let key in predicate) {
-          if (predicate[key] != array[i][key]) flag = false
-        }
-        if (flag) return i
-      }
-    } else if (typeof predicate == 'string') {
-      for (let i = fromIndex; i >= 0; i--) {
-        if (array[i][predicate]) return i
-      }
+    predicate = transform(predicate)
+    for (let i = fromIndex; i >= 0; i--) {
+      if (predicate(array[i])) return i
     }
     return -1
   }
@@ -299,18 +239,11 @@ var wuzejimaya = function () {
 
   function sortedIndexBy(array, value, iteratee) {
     let left = 0, right = array.length - 1
-    if (isFunction(iteratee)) {
-      while (right != left) {
-        let mid = (left + right) >> 1
-        if (iteratee(value) > iteratee(array[mid])) left = mid + 1
-        else right = mid
-      }
-    } else {
-        while (right != left) {
-          let mid = (left + right) >> 1
-          if (value[iteratee] > array[mid][iteratee]) left = mid + 1
-          else right = mid
-        }
+    iteratee = transform(iteratee)
+    while (right != left) {
+      let mid = (left + right) >> 1
+      if (iteratee(value) > iteratee(array[mid])) left = mid + 1
+      else right = mid
     }
     return value > array[left] ? left + 1 : left
   }
@@ -331,18 +264,11 @@ var wuzejimaya = function () {
 
   function sortedLastIndexBy(array, value, iteratee) {
     let left = 0, right = array.length - 1
-    if (isFunction(iteratee)) {
-      while (right != left) {
-        let mid = (left + right) >> 1
-        if (iteratee(value) >= iteratee(array[mid])) left = mid + 1
-        else right = mid
-      }
-    } else {
-        while (right != left) {
-          let mid = (left + right) >> 1
-          if (value[iteratee] >= array[mid][iteratee]) left = mid + 1
-          else right = mid
-        }
+    iteratee = transform(iteratee)
+    while (right != left) {
+      let mid = (left + right) >> 1
+      if (iteratee(value) >= iteratee(array[mid])) left = mid + 1
+      else right = mid
     }
     return value > array[left] ? left + 1 : left
   }
@@ -381,44 +307,18 @@ var wuzejimaya = function () {
 
   function takeRightWhile(array, predicate) {
     let i = array.length - 1
-    if (isFunction(predicate)) {
-      for (; i >= 0; i--) {
-        if (!predicate(array[i])) break
-      }
-    } else if (isObject(predicate)) {
-      for (; i >= 0; i--) {
-        if (!deepEqual(array[i], predicate)) break
-      }
-    } else if (isArray(predicate)) {
-      for (; i >= 0; i--) {
-        if (array[i][predicate[0]] != predicate[1]) break
-      }  
-    } else if (isString(predicate)) {
-      for (; i >= 0; i--) {
-        if (!array[i][predicate]) break
-      }  
+    predicate = transform(predicate)
+    for (; i >= 0; i--) {
+      if (!predicate(array[i])) break
     }
     return array.slice(i + 1)
   }
 
   function takeWhile(array, predicate) {
     let i = 0
-    if (isFunction(predicate)) {
-      for (; i < array.length; i++) {
-        if (!predicate(array[i])) break
-      }
-    } else if (isObject(predicate)) {
-      for (; i < array.length; i++) {
-        if (!deepEqual(array[i], predicate)) break
-      }
-    } else if (isArray(predicate)) {
-      for (; i < array.length; i++) {
-        if (array[i][predicate[0]] != predicate[1]) break
-      }  
-    } else if (isString(predicate)) {
-      for (; i < array.length; i++) {
-        if (!array[i][predicate]) break
-      }  
+    predicate = transform(predicate)
+    for (; i < array.length; i++) {
+      if (!predicate(array[i])) break
     }
     return array.slice(0, i)
   }
@@ -547,77 +447,48 @@ var wuzejimaya = function () {
     return zip(...arrays).map(it => iteratee(...it))
   }
 
+  function countBy(...collection) {
+    let iteratee = transform(collection.pop())
+    let map = {}, array = flatten(collection)
+    array.forEach(it => {
+      if (map.hasOwnProperty(iteratee(it))) map[iteratee(it)]++
+      else map[iteratee(it)] = 1
+    })
+    return map
+  }
   
   function every(collection, predicate) {
-    if (typeof predicate == 'function') {
-      for (let i = 0; i < collection.length; i++) {
-        if (!predicate(collection[i])) return false
-      }
-    } else if (Array.isArray(predicate)) {
-      for (let i = 0; i < collection.length; i++) {
-        if (collection[i][predicate[0]] != predicate[1]) return false
-      }
-    } else if (typeof predicate == 'object') {
-      for (let i = 0; i < collection.length; i++) {
-        for (let key in collection[i]) {
-          if (predicate[key] != collection[i][key]) return false
-        }
-      }
-    } else if (typeof predicate == 'string') {
-      for (let i = 0; i < collection.length; i++) {
-        if (!collection[i][predicate]) return false
-      }
+    predicate = transform(predicate)
+    for (let i = 0; i < collection.length; i++) {
+      if (!predicate(collection[i])) return false
     }
     return true
   }
+
   function filter(collection, predicate) {
     let res = []
-    if (typeof predicate == 'function') {
-      for (let i = 0; i < collection.length; i++) {
-        if (predicate(collection[i])) res.push(collection[i])
-      }
-    } else if (Array.isArray(predicate)) {
-      for (let i = 0; i < collection.length; i++) {
-        if (collection[i][predicate[0]] == predicate[1]) res.push(collection[i])
-      }
-    } else if (typeof predicate == 'object') {
-      for (let i = 0; i < collection.length; i++) {
-        let flag = true
-        for (let key in predicate) {
-          if (predicate[key] != collection[i][key]) flag = false
-        }
-        if (flag) res.push(collection[i])
-      }
-    } else if (typeof predicate == 'string') {
-      for (let i = 0; i < collection.length; i++) {
-        if (collection[i][predicate]) res.push(collection[i])
-      }
+    predicate = transform(predicate)
+    for (let i = 0; i < collection.length; i++) {
+      if (predicate(collection[i])) res.push(collection[i])
     }
     return res
   }
+
   function find(collection, predicate, fromIndex = 0) {
-    if (typeof predicate == 'function') {
-      for (let i = fromIndex; i < collection.length; i++) {
-        if (predicate(collection[i])) return collection[i]
-      }
-    } else if (Array.isArray(predicate)) {
-      for (let i = fromIndex; i < collection.length; i++) {
-        if (collection[i][predicate[0]] == predicate[1]) return collection[i]
-      }
-    } else if (typeof predicate == 'object') {
-      for (let i = fromIndex; i < collection.length; i++) {
-        let flag = true
-        for (let key in predicate) {
-          if (predicate[key] != collection[i][key]) flag = false
-        }
-        if (flag) return collection[i]
-      }
-    } else if (typeof predicate == 'string') {
-      for (let i = fromIndex; i < collection.length; i++) {
-        if (collection[i][predicate]) return collection[i]
-      }
+    predicate = transform(predicate)
+    for (let i = fromIndex; i < collection.length; i++) {
+      if (predicate(collection[i])) return collection[i]
     }
   }
+
+  function findLast(collection, predicate, fromIndex = collection.length - 1) {
+    predicate = transform(predicate)
+    for (let i = fromIndex; i >= 0; i--) {
+      if (predicate(collection[i])) return collection[i]
+    }
+  }
+  
+
   function toArray(value) {
     let res = []
     if (typeof (value) == 'string' || Array.isArray(value)) {
@@ -707,6 +578,7 @@ var wuzejimaya = function () {
     }
     return sum
   }
+
   function deepEqual(a, b) {
     if (a === b) return true//绝对相等，则返回真
     if (a !== a && b !== b) return true//特殊情况，NaN !== NaN，两个都是NAN时，返回真 
@@ -755,7 +627,6 @@ var wuzejimaya = function () {
       }
     }
   }
-  
   function isArray(predicate) {
     if (Object.prototype.toString.call(predicate) === '[object Array]') return true
     return false
@@ -774,11 +645,20 @@ var wuzejimaya = function () {
   }
   function transform(iteratee) {
     if (isString(iteratee)) {
-      return function(obj) {
-        return obj[iteratee]
+      return obj => obj[iteratee]
+    } else if (isFunction(iteratee)) {
+      return iteratee
+    } else if (isArray(iteratee)) {
+      return obj => obj[iteratee[0]] == iteratee[1]
+    } else if (isObject(iteratee)) {
+      return obj => {
+        let flag = true
+        for (let key in iteratee) {
+          if (iteratee[key] != obj[key]) flag = false
+        }
+        return flag
       }
     }
-    return iteratee
   }
   
   return {
@@ -842,9 +722,11 @@ var wuzejimaya = function () {
     zipObject,
     zipObjectDeep,
     zipWith,
+    countBy,
     every,
     filter,
     find,
+    findLast,
     toArray,
     max,
     maxBy,
