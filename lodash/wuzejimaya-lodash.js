@@ -22,6 +22,7 @@ var wuzejimaya = function () {
   }
 
   function differenceBy(array, ...values) {
+    if (isArray(values[values.length - 1])) return difference(array, ...values)
     let iteratee = transform(values.pop())
     let diffs = [].concat(...values)
     return array.filter(e => diffs.every(diff => iteratee(diff) != iteratee(e)))
