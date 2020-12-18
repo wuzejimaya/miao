@@ -23,7 +23,7 @@ var wuzejimaya = function () {
 
   function differenceBy(array, ...values) {
     if (isArray(values[values.length - 1])) return difference(array, ...values)
-    let iteratee = transform(values.pop())
+    let iteratee = _iteratee(values.pop())
     let diffs = [].concat(...values)
     return array.filter(e => diffs.every(diff => iteratee(diff) != iteratee(e)))
   }
@@ -43,7 +43,7 @@ var wuzejimaya = function () {
   
   function dropRightWhile(ary, predicate) {
     let i = ary.length - 1
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (; i >= 0; i--) {
       if (!predicate(ary[i])) break
     }
@@ -52,7 +52,7 @@ var wuzejimaya = function () {
 
   function dropWhile(ary, predicate) {
     let i = 0
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (; i < ary.length; i++) {
       if (!predicate(ary[i])) break
     }
@@ -82,7 +82,7 @@ var wuzejimaya = function () {
 
   function findIndex(array, predicate, fromIndex = 0) {
     if (fromIndex < 0) return -1
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (let i = fromIndex; i < array.length; i++) {
       if (predicate(array[i])) return i
     }
@@ -90,7 +90,7 @@ var wuzejimaya = function () {
   }
 
   function findLastIndex(array, predicate, fromIndex = array.length - 1) {
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (let i = fromIndex; i >= 0; i--) {
       if (predicate(array[i])) return i
     }
@@ -160,7 +160,7 @@ var wuzejimaya = function () {
   }
 
   function intersectionBy(...arrays) {
-    let iteratee = transform(arrays.pop())
+    let iteratee = _iteratee(arrays.pop())
     return arrays[0].filter(e => arrays.every(array => array.some(
       it => iteratee(it) == iteratee(e))))
   }
@@ -239,7 +239,7 @@ var wuzejimaya = function () {
 
   function sortedIndexBy(array, value, iteratee) {
     let left = 0, right = array.length - 1
-    iteratee = transform(iteratee)
+    iteratee = _iteratee(iteratee)
     while (right != left) {
       let mid = (left + right) >> 1
       if (iteratee(value) > iteratee(array[mid])) left = mid + 1
@@ -264,7 +264,7 @@ var wuzejimaya = function () {
 
   function sortedLastIndexBy(array, value, iteratee) {
     let left = 0, right = array.length - 1
-    iteratee = transform(iteratee)
+    iteratee = _iteratee(iteratee)
     while (right != left) {
       let mid = (left + right) >> 1
       if (iteratee(value) >= iteratee(array[mid])) left = mid + 1
@@ -307,7 +307,7 @@ var wuzejimaya = function () {
 
   function takeRightWhile(array, predicate) {
     let i = array.length - 1
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (; i >= 0; i--) {
       if (!predicate(array[i])) break
     }
@@ -316,7 +316,7 @@ var wuzejimaya = function () {
 
   function takeWhile(array, predicate) {
     let i = 0
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (; i < array.length; i++) {
       if (!predicate(array[i])) break
     }
@@ -328,7 +328,7 @@ var wuzejimaya = function () {
   }
 
   function unionBy(...arrays) {
-    let iteratee = transform(arrays.pop())
+    let iteratee = _iteratee(arrays.pop())
     let array = [].concat(...arrays), res = []
     array.forEach(it => {
       if (res.every(e => iteratee(e) != iteratee(it))) res.push(it)
@@ -356,7 +356,7 @@ var wuzejimaya = function () {
 
   function uniqBy(array, iteratee) {
     let res = []
-    iteratee = transform(iteratee)
+    iteratee = _iteratee(iteratee)
     array.forEach(it => {
       if (res.every(e => iteratee(e) != iteratee(it))) res.push(it)
     })
@@ -396,7 +396,7 @@ var wuzejimaya = function () {
   }
 
   function xorBy(...arrays) {
-    let iteratee = transform(arrays.pop())
+    let iteratee = _iteratee(arrays.pop())
     let map = new Map(), array = flatten(arrays)
     array.forEach((it) => {
         if (map.has(iteratee(it))) {
@@ -448,7 +448,7 @@ var wuzejimaya = function () {
   }
 
   function countBy(...collection) {
-    let iteratee = transform(collection.pop())
+    let iteratee = _iteratee(collection.pop())
     let map = {}, array = flatten(collection)
     array.forEach(it => {
       if (map.hasOwnProperty(iteratee(it))) map[iteratee(it)]++
@@ -458,7 +458,7 @@ var wuzejimaya = function () {
   }
   
   function every(collection, predicate) {
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (let i = 0; i < collection.length; i++) {
       if (!predicate(collection[i])) return false
     }
@@ -467,7 +467,7 @@ var wuzejimaya = function () {
 
   function filter(collection, predicate) {
     let res = []
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (let i = 0; i < collection.length; i++) {
       if (predicate(collection[i])) res.push(collection[i])
     }
@@ -475,189 +475,148 @@ var wuzejimaya = function () {
   }
 
   function find(collection, predicate, fromIndex = 0) {
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (let i = fromIndex; i < collection.length; i++) {
       if (predicate(collection[i])) return collection[i]
     }
   }
 
   function findLast(collection, predicate, fromIndex = collection.length - 1) {
-    predicate = transform(predicate)
+    predicate = _iteratee(predicate)
     for (let i = fromIndex; i >= 0; i--) {
       if (predicate(collection[i])) return collection[i]
     }
   }
-  
 
   function toArray(value) {
     let res = []
-    if (typeof (value) == 'string' || Array.isArray(value)) {
-      for (let i = 0; i < value.length; i++) {
-        res.push(value[i])
-      }
-    } else if (typeof (value) == 'object') {
-      for (let key in value) {
-        res.push(value[key])
-      }
-    } else {
-      return res
+    for (let key in value) {
+      res.push(value[key])
     }
     return res
-  }
-  function max(array) {
-    if (array.length == 0|| !Array.isArray(array)) return undefined
-    let max = -Infinity
-    for (let i = 0; i < array.length; i++) {
-      max = max < array[i] ? array[i] : max
-    }
-    return max
-  }
-  function maxBy(array, iteratee) {
-    let max = -Infinity, res
-    if (typeof (iteratee) == 'function') {
-      for (let i = 0; i < array.length; i++) {
-        if (max < iteratee(array[i])) {
-          res = array[i]
-          max = iteratee(array[i])
-        }
-      }
-    } else {
-      for (let i = 0; i < array.length; i++) {
-        if (max < array[i][iteratee]) {
-          res = array[i]
-          max = array[i][iteratee]
-        }
-      }
-    }
-    return res
-  }
-  function min(array) {
-    if (array.length == 0|| !Array.isArray(array)) return undefined
-    let min = Infinity
-    for (let i = 0; i < array.length; i++) {
-      min = min > array[i] ? array[i] : min
-    }
-    return min
-  }
-  function minBy(array, iteratee) {
-    let min = Infinity, res
-    if (typeof (iteratee) == 'function') {
-      for (let i = 0; i < array.length; i++) {
-        if (min > iteratee(array[i])) {
-          res = array[i]
-          min = iteratee(array[i])
-        }
-      }
-    } else {
-      for (let i = 0; i < array.length; i++) {
-        if (min > array[i][iteratee]) {
-          res = array[i]
-          min = array[i][iteratee]
-        }
-      }
-    }
-    return res
-  }
-  function sum(array) {
-    let sum = 0
-    for (let i = 0; i < array.length; i++) {
-      sum += array[i]
-    }
-    return sum
-  }
-  function sumBy(array, iteratee) {
-    let sum = 0
-    if (typeof (iteratee) == 'function') {
-      for (let i = 0; i < array.length; i++) {
-        sum += iteratee(array[i])
-      }
-    } else {
-      for (let i = 0; i < array.length; i++) {
-        sum += array[i][iteratee]
-      }
-    }
-    return sum
   }
 
-  function deepEqual(a, b) {
-    if (a === b) return true//绝对相等，则返回真
-    if (a !== a && b !== b) return true//特殊情况，NaN !== NaN，两个都是NAN时，返回真 
-    let typeA = typeof(a)
-    let typeB = typeof(b)
-    if (typeA != typeB) {//类型不相同，直接返回假
-      return false
-    } else {//类型相同
-      if (typeA != 'object') {//都是基本数据类型，直接判断是否相等
-        return a === b
-      } else {//都不是基本数据类型，可能是数组，或者对象
-        if (Array.isArray(a) != Array.isArray(b)) {//一个为数组一个为对象，直接返回假
+  function max(array) {
+    if (!array.length) return undefined
+    return array.reduce((res, it) => Math.max(res, it), -Infinity)
+  }
+
+  function maxBy(array, iteratee) {
+    let max = -Infinity, res
+    iteratee = _iteratee(iteratee)
+    for (let i = 0; i < array.length; i++) {
+      if (max < iteratee(array[i])) {
+        res = array[i]
+        max = iteratee(array[i])
+      }
+    }
+    return res
+  }
+
+  function min(array) {
+    if (!array.length) return undefined
+    return array.reduce((res, it) => Math.min(res, it), Infinity)
+  }
+
+  function minBy(array, iteratee) {
+    let min = Infinity, res
+    iteratee = _iteratee(iteratee)
+    for (let i = 0; i < array.length; i++) {
+      if (min > iteratee(array[i])) {
+        res = array[i]
+        min = iteratee(array[i])
+      }
+    }
+    return res
+  }
+
+  function sum(array) {
+    return array.reduce((sum, it) => sum + it, 0)
+  }
+
+  function sumBy(array, iteratee) {
+    iteratee = _iteratee(iteratee)
+    return array.reduce((sum, it) => sum + iteratee(it), 0)
+  }
+
+  function get(object, path, defaultValue) {
+    let names = path.split('.')
+    for (let name of names) {
+      if (name in Object(object)) {
+        object = object[name]
+      } else {
+        return defaultValue
+      }
+    }
+    return object
+  }
+
+  function isMatch(object, source) {
+    for (let key in source) {
+      if (isObject(source[key])) {
+        return isMatch(object[key], source[key])
+      } else {
+        if (source[key] !== object[key]) {
           return false
-        } else {//两个都是数组或者两个都是对象
-          if (Array.isArray(a)) {//两个都是数组
-            if (a.length != b.length) {//如果两个数组长度不同，直接返回假
-              return false
-            } else {
-              for (let i = 0; i < a.length; i++) {
-                if (!deepEqual(a[i], b[i])){//递归对比每一项，一项不同，则返回假
-                  return false
-                }
-              }
-              return true
-            }
-          } else {//两个都是对象
-            if (a.length != b.length) {//如果两个对象长度不同，直接返回假
-              return false
-            } else {
-              let keysA = Object.keys(a), keysB = Object.keys(b)
-              let keys = Array.from(new Set(keysA.concat(keysB)))//a和b的属性合并去重，避免重复对比
-              if (keys.length != keysA.length) {//长度不同，直接返回假
-                return false
-              } else {
-                for (let i = 0; i < keys.length; i++) {
-                  let key = keys[i]
-                  if (!(deepEqual(a[key], b[key]))) {//递归对比每一项，一项不同，则返回假
-                    return false
-                  }
-                }
-                return true
-              }
-            }
-          }
         }
       }
     }
+    return true
   }
+
+  function matches(source) {
+    return bind(isMatch, null, window, source)
+  }
+
+  function matchesProperty(array) {
+    return obj => obj[array[0]] == array[1]
+  }
+
+  function property(path) {
+    return bind(get, null, window, path, undefined)
+  }
+
+  function bind(func, thisArg, ...partials) {
+    return function (...args) {
+      let copy = partials.slice()
+      for (let i = 0; i < copy.length; i++) {
+        if (copy[i] === window) {
+          copy[i] = args.shift()
+        }
+      }
+      return func.call(thisArg, ...copy, ... args)
+    }
+  }
+
   function isArray(predicate) {
     if (Object.prototype.toString.call(predicate) === '[object Array]') return true
     return false
   }
+
   function isFunction(predicate) {
     if (Object.prototype.toString.call(predicate) === '[object Function]') return true
     return false
   }
+
   function isObject(predicate) {
     if (Object.prototype.toString.call(predicate) === '[object Object]') return true
     return false
   }
+
   function isString(predicate) {
     if (Object.prototype.toString.call(predicate) === '[object String]') return true
     return false
   }
-  function transform(iteratee) {
-    if (isString(iteratee)) {
-      return obj => obj[iteratee]
-    } else if (isFunction(iteratee)) {
-      return iteratee
-    } else if (isArray(iteratee)) {
-      return obj => obj[iteratee[0]] == iteratee[1]
-    } else if (isObject(iteratee)) {
-      return obj => {
-        let flag = true
-        for (let key in iteratee) {
-          if (iteratee[key] != obj[key]) flag = false
-        }
-        return flag
-      }
+
+  function _iteratee(predicate) {
+    if (isFunction(predicate)) {
+      return predicate
+    } else if (isObject(predicate)) {
+      return matches(predicate)
+    } else if (isArray(predicate)) {
+      return matchesProperty(predicate)
+    } else if (isString(predicate)) {
+      return property(predicate)
     }
   }
   
