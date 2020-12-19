@@ -488,6 +488,223 @@ var wuzejimaya = function () {
     }
   }
 
+  function flatMap(collection, iteratee) {
+    return flatMapDepth(collection, iteratee)
+  }
+
+  function flatMapDeep(collection, iteratee) {
+    return flatMapDepth(collection, iteratee, Infinity)
+  }
+
+  function flatMapDepth(collection, iteratee, depth = 1) {
+    let array = collection.map(it => iteratee(it))
+    return flattenDepth(array, depth)
+  }
+
+  function forEach(collection, iteratee) {
+    for (let key in collection) {
+      iteratee(collection[key], key, collection)
+    }
+    return collection
+  }
+
+  function forEachRight(collection, iteratee) {
+    for (let i = collection.length - 1; i >= 0; i--) {
+      iteratee(collection[i], i)
+    }
+    return collection
+  }
+
+  function groupBy(collection, iteratee) {
+    let map = {}
+    iteratee = _iteratee(iteratee)
+    for (let i = 0; i < collection.length; i++) {
+      if (iteratee(collection[i]) in map) {
+        map[iteratee(collection[i])].push(collection[i])
+      } else {
+        map[iteratee(collection[i])] = [collection[i]]
+      }
+    }
+    return map
+  }
+
+  function includes(collection, value, fromIndex = 0) {
+    fromIndex = fromIndex >= 0 ? fromIndex : collection.length + fromIndex
+    if (isObject(collection)) {
+      for (let key in collection) {
+        if (collection[key] === value) return true
+      }
+    } else if (isArray(collection)) {
+      for (let i = fromIndex; i < collection.length; i++) {
+        if (collection[i] === value) return true
+      }
+    } else if (isString(collection)) {
+      if (collection.includes(value)) return true
+    }
+    return false
+  }
+
+  function invokeMap(collection, path, ...args) {
+    if (isString(path)) 
+      return collection.map(it => it[path](...args))
+    return collection.map(it => path.call(it, ...args))
+  }
+
+  function keyBy(collection, iteratee) {
+    let map = {}
+    iteratee = _iteratee(iteratee)
+    collection.forEach(it => {
+      map[iteratee(it)] = it
+    })
+    return map
+  }
+
+  function map(collection, iteratee) {
+    let res = []
+    iteratee = _iteratee(iteratee)
+    if (isArray(collection)) {
+      for (let i = 0; i < collection.length; i++) {
+        res.push(iteratee(collection[i], i, collection))
+      }
+    } else if (isObject) {
+      for (let key in collection) {
+        res.push(iteratee(collection[key], key, collection))
+      }
+    }
+    return res
+  }
+
+  function orderBy(collection, iteratees, orders) {
+    iteratees = iteratees.map(iteratee => _iteratee(iteratee))
+    let copy = collection.slice()
+    copy.sort((obj1, obj2) => {
+      for (let key in iteratees) {
+        let compare = _compare(obj1, obj2, iteratees[key], orders[key])
+        if (compare !== 0) return compare
+      }
+      return 0
+    })
+    return copy
+  }
+
+  function _compare(obj1, obj2, iteratee, order) {
+    if (order === 'asc') {
+      if (iteratee(obj1) < iteratee(obj2)) return -1
+      else if (iteratee(obj1) > iteratee(obj2)) return 1
+      else return 0
+    } else if (order === 'desc') {
+      if (iteratee(obj1) > iteratee(obj2)) return -1
+      else if (iteratee(obj1) < iteratee(obj2)) return 1
+      else return 0
+    }
+  }
+
+  function partition(collection, predicate) {
+    let res = [[], []]
+    predicate = _iteratee(predicate)
+    collection.forEach(it => {
+      if (predicate(it)) res[0].push(it)
+      else res[1].push(it)
+    })
+    return res
+  }
+
+  function reduce(collection, iteratee, accumulator) {
+    let result = accumulator
+    if (isArray(collection)) {
+      let start = 0
+      if (accumulator === undefined) {
+        result = collection[0]
+        start = 1
+      }
+      for (let i = start; i < collection.length; i++) {
+        result = iteratee(result, collection[i], i, collection)
+      }
+      return result
+    } else {
+      let keys = Object.keys(collection)
+      if (accumulator === undefined) {
+        result = collection[keys.shift()]     
+      }
+      for (let key of keys) {
+        result = iteratee(result, collection[key], key, collection)
+      }
+      return result
+    }
+  }
+
+  function reduceRight(collection, iteratee, accumulator) {
+    let result = accumulator
+    if (isArray(collection)) {
+      let start = collection.length - 1
+      if (accumulator === undefined) {
+        result = collection[collection.length - 1]
+        start = collection.length - 2
+      }
+      for (let i = start; i >= 0; i--) {
+        result = iteratee(result, collection[i], i, collection)
+      }
+      return result
+    } else {
+      let keys = Object.keys(collection)
+      if (accumulator === undefined) {
+        result = collection[keys.pop()]     
+      }
+      for (let i = keys.length - 1; i >= 0; i++) {
+        result = iteratee(result, collection[keys[i]], keys[i], collection)
+      }
+      return result
+    }
+  }
+
+  function reject(collection, predicate) {
+    let res = []
+    predicate = _iteratee(predicate)
+    for (let i = 0; i < collection.length; i++) {
+      if (!predicate(collection[i])) res.push(collection[i])
+    }
+    return res
+  }
+
+  function sample(collection) {
+    return sampleSize(collection)[0]
+  }
+
+  function sampleSize(collection, n = 1) {
+    let res = []
+    n = n > collection.length? collection.length : n
+    for (let i = 0; i < n;) {
+      let index = (Math.random() * collection.length) | 0;
+      if (!res.includes(collection[index])) {
+        res.push(collection[index])
+        i++
+      }
+    }
+    return res
+  }
+
+  function shuffle(collection) {
+    return sampleSize(collection, collection.length)
+  }
+
+  function size(collection) {
+    if (isString(collection)) return collection.length
+    else return Object.keys(collection).length
+  }
+
+  function some(collection, predicate) {
+    predicate = _iteratee(predicate)
+    for (let i = 0; i < collection.length; i++) {
+      if (predicate(collection[i])) return true
+    }
+    return false
+  }
+
+  function sortBy(collection, iteratees) {
+    let orders = Array(iteratees.length).fill('asc')
+    return orderBy(collection, iteratees, orders)
+  }
+
   function toArray(value) {
     let res = []
     for (let key in value) {
@@ -686,6 +903,27 @@ var wuzejimaya = function () {
     filter,
     find,
     findLast,
+    flatMap,
+    flatMapDeep,
+    flatMapDepth,
+    forEach,
+    forEachRight,
+    groupBy,
+    includes,
+    invokeMap,
+    keyBy,
+    map,
+    orderBy,
+    partition,
+    reduce,
+    reduceRight,
+    reject,
+    sample,
+    sampleSize,
+    shuffle,
+    size,
+    some,
+    sortBy,
     toArray,
     max,
     maxBy,
