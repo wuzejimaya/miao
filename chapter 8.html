@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /*
+      Retry
+    */
+   function Retry() {
+
+   }
+    /*
+      The locked box
+    */
+    var box = {
+      locked : true ,
+      unlock : function () { this . locked = false ; } ,
+      lock : function () { this . locked = true ; } ,
+      _content : [1,2,3] ,
+      get content () {
+      if ( this . locked ) throw new Error (" Locked !") ;
+        return this . _content ;
+      }
+    }
+
+    function withBoxUnlocked(f, box) {
+      box.unlock()
+      try {
+         return f(box)
+      } finally {
+        box.lock()
+      }
+    }
+
+    function f(obj) {
+      return obj.content
+    }
+
+    /*
+      作业：实现describe和it函数，使其能够输出形如macha的log
+    */
+    function assert(test, msg) {
+      if (!test) {
+        throw new Error(msg)
+      }
+    }
+
+    describe('JS', function() {
+      describe('Array', function () {
+        describe('#indexOf()', function() {
+          it('should return -1 when the value is not present', function() {
+            assert.equal([1, 2, 3].indexOf(4), -1);
+          });
+          it('should return 0 when the value is at the first place', function() {
+            assert.equal([1, 2, 3].indexOf(1), 0);
+          });
+          it('should return 1 when the value is at the second place', function() {
+            assert.equal([1, 2, 3].indexOf(2), 1);
+          });
+        });
+        describe('#slice()', function() {
+          it('should return full array when no args', function() {
+            assert.deepEqual([1, 2, 3].slice(), [1, 2, 3]);
+            assert(   isEqual([1, 2, 3].slice(), [1, 2, 3])   )
+          });
+        });
+      })
+      describe('String', function () {
+        describe('#indexOf()', function() {
+          it('should return -1 when the value is not present', function() {
+            assert.equal([1, 2, 3].indexOf(4), -1);
+          });
+          it('should return 0 when the value is at the first place', function() {
+            assert.equal([1, 2, 3].indexOf(1), 0);
+          });
+          it('should return 1 when the value is at the second place', function() {
+            assert.equal([1, 2, 3].indexOf(2), 1);
+          });
+        });
+        describe('#slice()', function() {
+          it('should return full array when no args', function() {
+            assert.deepEqual([1, 2, 3].slice(), [1,2,3]);
+          });
+        });
+      })
+      describe('Number', function () {
+        describe('#indexOf()', function() {
+          it('should return -1 when the value is not present', function() {
+            assert.equal([1, 2, 3].indexOf(4), -1);
+          });
+          it('should return 0 when the value is at the first place', function() {
+            assert.equal([1, 2, 3].indexOf(1), 0);
+          });
+          it('should return 1 when the value is at the second place', function() {
+            assert.equal([1, 2, 3].indexOf(2), 1);
+          });
+        });
+        describe('#slice()', function() {
+          it('should return full array when no args', function() {
+            assert.deepEqual([1, 2, 3].slice(), [1,2,3]);
+          });
+        });
+      })
+    });
+  </script>
+</body>
+</html>

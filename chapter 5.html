@@ -7,7 +7,41 @@
 </head>
 <body>
   <script>
+    /*
+      作业：实现JSON.stringify函数
+    */
+    let obj = {
+      a: 1,
+      b: 2,
+      c: [1,2,3,{x: 1, y: 2}]
+    }
+    function stringify(val) {
+      if (Array.isArray(val)) {
+        return '[' + val.map(stringify).join() + ']'
+      }
+      if (typeof val == 'object') {
+        let result = '{'
+        for (let key in val) {
+          result += '"' + key + '":' + stringify(val[key]) + ','
+        }
+        result = result.slice(0, -1)
+        return result += '}'
+      }
+      if (typeof val === 'string') return '"' + val + '"'
+      if (typeof val == 'number') return val + ''
+      if (val === null) return 'null'
+      if (val === undefined) return  'undefined'
+      if (val === false) return 'false'
+      if (val === true) return 'true'
+    }
+    /*
+      作业：实现JSON.parse函数
+      {"a":1,"b":2,"c":[1,2,3,{"x":1,"y":2}]}
+    */
+   let string = '{"a":1,"b":2,"c":[1,2,3,{"x":1,"y":2}]}'
+   function parse(str) {
     
+   }
   </script>
 </body>
 </html>

@@ -705,6 +705,127 @@ var wuzejimaya = function () {
     return orderBy(collection, iteratees, orders)
   }
 
+  function after(n, func) {
+    let c = 0
+    return function (...args) {
+      c++
+      if (c > n) {
+        return func.call(this, ...args)
+      }
+    }
+  }
+
+  function ary(func, n = func.length) {
+    return function (...args) {
+        return func(args.slice(0, n))
+    }
+  }
+  
+  function before(n, func) {
+    let c = 0, result
+    return function (...args) {
+      if (c < n) {
+        return result = func.bind(this, ...args)
+        c++
+      } else {
+        return result
+      }
+    }
+  }
+
+  function bind(func, thisArg, ...partials) {
+    return function (...args) {
+      let copy = partials.slice()
+      for (let i = 0; i < copy.length; i++) {
+        if (copy[i] === window) {
+          copy[i] = args.shift()
+        }
+      }
+      return func.call(thisArg, ...copy, ... args)
+    }
+  }
+
+  function defer(func, ...args) {
+    let timeoutID = setTimeout(func, 1, ...args)
+    return timeoutID - 1
+  }
+
+  function delay(func, wait, ...args) {
+    var timeoutID = setTimeout(func, wait, ...args)
+    return timeoutID - 1
+  }
+
+  function flip(func) {
+    return function (...args) {
+      return func(...args.reverse())
+    }
+  }
+
+  function negate(predicate) {
+    return function (...args) {
+      return !predicate(...args)
+    }
+  }
+
+  function castArray(value) {
+    if (isArray(value)) return value
+    if (arguments.length == 0) return []
+    return [value]
+  }
+
+  function conformsTo(object, source) {
+    for (key in source) {
+        let predicate = source[key];
+        if (!predicate(object[key])) {
+            return false;
+        }
+    }
+    return true;
+  }
+
+  function eq(value, other) {
+    if (Number.isNaN(value) && Number.isNaN(other)) return true
+    return value === other
+  }
+
+  function gt(value, other) {
+    return value > other
+  }
+
+  function gte(value, other) {
+    return value >= other
+  }
+
+  function isArguments(values) {
+    return Object.prototype.toString.call(values) === "[object Arguments]"
+  }
+
+  function isArray(predicate) {
+    if (Object.prototype.toString.call(predicate) === '[object Array]') return true
+    return false
+  }
+
+  function isArrayBuffer(values) {
+    return Object.prototype.toString.call(values) === "[object ArrayBuffer]"
+  }
+
+  function isArrayLike(value) {
+    if (typeof value == "function") return false;
+    return value.length >= 0 && value.length < Number.MAX_SAFE_INTEGER;
+  }
+
+  function isArrayLikeObject(value) {
+    return isArrayLike(value) && typeof value === "object";
+  }
+
+  function isBoolean(value) {
+    return typeof value === "bollean";
+  }
+
+  function isDate(value) {
+    return value instanceof Date
+  }
+
   function toArray(value) {
     let res = []
     for (let key in value) {
@@ -791,23 +912,6 @@ var wuzejimaya = function () {
 
   function property(path) {
     return bind(get, null, window, path, undefined)
-  }
-
-  function bind(func, thisArg, ...partials) {
-    return function (...args) {
-      let copy = partials.slice()
-      for (let i = 0; i < copy.length; i++) {
-        if (copy[i] === window) {
-          copy[i] = args.shift()
-        }
-      }
-      return func.call(thisArg, ...copy, ... args)
-    }
-  }
-
-  function isArray(predicate) {
-    if (Object.prototype.toString.call(predicate) === '[object Array]') return true
-    return false
   }
 
   function isFunction(predicate) {
@@ -924,6 +1028,20 @@ var wuzejimaya = function () {
     size,
     some,
     sortBy,
+    defer,
+    delay,
+    castArray,
+    conformsTo,
+    eq,
+    gt,
+    gte,
+    isArguments,
+    isArray,
+    isArrayBuffer,
+    isArrayLike,
+    isArrayLikeObject,
+    isBoolean,
+    isDate,
     toArray,
     max,
     maxBy,

@@ -129,12 +129,12 @@
       this.x = x
       this.y = y
     }
-    Vector.prototype.plus = function (obj) {
-      return new Vector(this.x + obj.x, this.y + obj.y)
+    Vector.prototype.plus = function (vector) {
+      return new Vector(this.x + vector.x, this.y + vector.y)
     }
 
-    Vector.prototype.minus = function (obj) {
-      return new Vector(this.x - obj.x, this.y - obj.y)
+    Vector.prototype.minus = function (vector) {
+      return new Vector(this.x - vector.x, this.y - vector.y)
     }
 
     Object.defineProperty(Vector.prototype, "length", {
