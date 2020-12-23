@@ -530,7 +530,7 @@ var wuzejimaya = function () {
 
   function includes(collection, value, fromIndex = 0) {
     fromIndex = fromIndex >= 0 ? fromIndex : collection.length + fromIndex
-    if (isObject(collection)) {
+    if (_isObject(collection)) {
       for (let key in collection) {
         if (collection[key] === value) return true
       }
@@ -566,7 +566,7 @@ var wuzejimaya = function () {
       for (let i = 0; i < collection.length; i++) {
         res.push(iteratee(collection[i], i, collection))
       }
-    } else if (isObject) {
+    } else if (_isObject(collection)) {
       for (let key in collection) {
         res.push(iteratee(collection[key], key, collection))
       }
@@ -825,6 +825,189 @@ var wuzejimaya = function () {
     return value instanceof Date
   }
 
+  function isElement(value) {
+    let regexp = /^\[object HTML\w+\]$/;
+    return regexp.test(Object.prototype.toString.call(value));
+  }
+
+  function isEmpty(value) {
+    if (isMap(value) || isSet(value)) return value.size === 0
+    if (isArray(value) || isString(value)) return value.lenght === 0
+    if (_isObject(value)) return Object.keys(value).length === 0
+    return true
+  }
+
+  function isEqual(value, other) {
+    if (value === other) return true
+    if (value !== value && other !== other) return true
+    let typeValue = getType(value), typeOther = getType(other)
+    if (typeValue != typeOther) return false 
+    if (typeof value != 'object') return a === b
+    if (isArray(value)) {
+      if (value.length != other.length) {
+        return false
+      } else {
+        for (let i = 0; i < value.length; i++) {
+          if (!isEqual(value[i], other[i])){
+            return false
+          }
+        }
+        return true
+      }
+    } else {
+      let keysValue = Object.keys(value), keysOther = Object.keys(other)
+      let keys = Array.from(new Set(keysValue.concat(keysOther)))//a和b的属性合并去重，避免重复对比
+        if (keys.length != keysValue.length) {
+          return false
+        } else {
+          for (let i = 0; i < keys.length; i++) {
+            let key = keys[i]
+            if (!(isEqual(value[key], other[key]))) {
+              return false
+            }
+          }
+          return true
+        }
+    }
+  }
+
+  function isEqualWith(value, other, customizer) {
+    if (customizer === undefined) {
+      return isEqual(value, other)
+    } else {
+      for (let i = 0; i < value.length; i++) {
+        if (customizer(value[i], other[i]) === false) {
+          return false
+        }
+      }
+      return true
+    }
+  }
+
+  function isError(value) {
+    return getType(value) === "[object Error]"
+  }
+
+  function isFinite(value) {
+    if (!isNumber(value)) return false
+    return value !== Infinity && value !== -Infinity
+  }
+
+  function isFunction(value) {
+    if (arguments.length === 0) return true
+    return getType(value) === '[object Function]'
+  }
+
+  function isInteger(value) {
+    return isNumber(value) && Number.parseInt(value) === value
+  }
+
+  function isLength(value) {
+    return isInteger(value) && value >= 0
+  }
+
+  function isMap(value) {
+    return getType(value) === "[object Map]"
+  }
+
+  function isMatch(object, source) {
+    for (let key in source) {
+      if (_isObject(source[key])) {
+        return isMatch(object[key], source[key])
+      } else {
+        if (source[key] !== object[key]) {
+          return false
+        }
+      }
+    }
+    return true
+  }
+
+  function isMatchWith(object, source, customizer) {
+    for (let key in source) {
+      if (_isObject(source[key])) {
+        return isMatchWith(object[key], source[key], customizer)
+      } else {
+        if (customizer(source[key], object[key]) === false) {
+          return false
+        }
+      }
+    }
+    return true
+  }
+
+  function isNaN(value) {
+    if (typeof value === "object") value = value.valueOf()
+    return value !== value
+  }
+
+  function isNil(value) {
+    return value == null
+  }
+
+  function isNull(value) {
+    return value === null
+  }
+
+  function isNumber(value) {
+    return getType(value) === "[object Number]"
+  }
+
+  function isObject(value) {
+    return value !== null && typeof value === "object" || typeof value === "function"
+  }
+
+  function isObjectLike(value) {
+    return value !== null && typeof value === "object"
+  }
+
+  function isPlainObject(value) {
+    let proto = Object.getPrototypeOf(value)
+    return proto === Object.prototype || proto === null
+  }
+
+  function isRegExp(value) {
+    return getType(value) === "[object RegExp]"
+  }
+
+  function isSafeInteger(value) {
+    return isNumber(value)
+      && Math.abs(value) <= Number.MAX_SAFE_INTEGER
+      && Math.abs(value) > Number.MIN_VALUE
+  }
+
+  function isSet(value) {
+    return getType(value) === "[object Set]"
+  }
+
+  function isString(value) {
+    return getType(value) === '[object String]'
+  }
+
+  function isSymbol(value) {
+    return getType(value) == "[object Symbol]"
+  }
+
+  function isUndefined(value) {
+    return value === undefined
+  }
+
+  function isWeakMap(val) {
+    return getType(val) == "[object WeakMap]";
+  }
+
+  function isWeakSet(val) {
+    return getType(val) == "[object WeakSet]";
+  }
+
+  function lt(value, other) {
+    return value < other
+  }
+  
+  function lte(value, other) {
+    return value <= other
+  }
+
   function toArray(value) {
     let res = []
     for (let key in value) {
@@ -832,6 +1015,60 @@ var wuzejimaya = function () {
     }
     return res
   }
+
+  function toFinite(value) {
+    value = Number(value)
+    if (value === Infinity) return Number.MAX_VALUE
+    if (value === -Infinity) return Number.MIN_VALUE
+    return value
+  }
+
+  function toInteger(value) {
+    return Math.floor(toFinite(value))
+  }
+
+  function toLength(value) {
+    let integer = 2 ** 32 - 1
+    if (value >= integer) return integer
+    if (value <= -integer) return -integer
+    return Math.floor(Number(value))
+  }
+
+  function toNumber(value) {
+    return Number(value)
+  }
+
+  function assign(object, ...sources) {
+    sources.forEach(it => {
+        for (let key of Object.keys(it)) {
+            object[key] = it[key]
+        }
+    })
+    return object
+  }
+
+  function toSafeInteger(value) {
+    value = toInteger(value)
+    if (value > Number.MAX_SAFE_INTEGER) return Number.MAX_SAFE_INTEGER
+    if (value < Number.MIN_SAFE_INTEGER) return Number.MIN_SAFE_INTEGER
+    return value
+  }
+
+  function add(augend, addend) {
+    return augend + addend
+  }
+
+  function ceil(number, precision = 0) {
+    return Math.ceil(number * (10 ** precision)) / (10 ** precision)
+  }
+
+  function divide(dividend, divisor) {
+    return dividend / divisor
+  }
+
+  function floor(number, precision = 0) {
+    return Math.floor(number * (10 ** precision)) / (10 ** precision)
+  } 
 
   function max(array) {
     if (!array.length) return undefined
@@ -888,19 +1125,6 @@ var wuzejimaya = function () {
     return object
   }
 
-  function isMatch(object, source) {
-    for (let key in source) {
-      if (isObject(source[key])) {
-        return isMatch(object[key], source[key])
-      } else {
-        if (source[key] !== object[key]) {
-          return false
-        }
-      }
-    }
-    return true
-  }
-
   function matches(source) {
     return bind(isMatch, null, window, source)
   }
@@ -913,25 +1137,14 @@ var wuzejimaya = function () {
     return bind(get, null, window, path, undefined)
   }
 
-  function isFunction(predicate) {
-    if (Object.prototype.toString.call(predicate) === '[object Function]') return true
-    return false
-  }
-
-  function isObject(predicate) {
-    if (Object.prototype.toString.call(predicate) === '[object Object]') return true
-    return false
-  }
-
-  function isString(predicate) {
-    if (Object.prototype.toString.call(predicate) === '[object String]') return true
-    return false
+  function _isObject(predicate) {
+    return getType(predicate) === '[object Object]'
   }
 
   function _iteratee(predicate) {
     if (isFunction(predicate)) {
       return predicate
-    } else if (isObject(predicate)) {
+    } else if (_isObject(predicate)) {
       return matches(predicate)
     } else if (isArray(predicate)) {
       return matchesProperty(predicate)
@@ -1045,7 +1258,46 @@ var wuzejimaya = function () {
     isArrayLikeObject,
     isBoolean,
     isDate,
+    isElement,
+    isEmpty,
+    isEqual,
+    isEqualWith,
+    isError,
+    isFinite,
+    isFunction,
+    isInteger,
+    isLength,
+    isMap,
+    isMatch,
+    isMatchWith,
+    isNaN,
+    isNil,
+    isNull,
+    isNumber,
+    isObject,
+    isObjectLike,
+    isPlainObject,
+    isRegExp,
+    isSafeInteger,
+    isSet,
+    isString,
+    isSymbol,
+    isUndefined,
+    isWeakMap,
+    isWeakSet,
+    lt,
+    lte,
     toArray,
+    toFinite,
+    toInteger,
+    toLength,
+    toNumber,
+    assign,
+    toSafeInteger,
+    add,
+    ceil,
+    divide,
+    floor,
     max,
     maxBy,
     min,
