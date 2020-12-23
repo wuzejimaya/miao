@@ -797,16 +797,15 @@ var wuzejimaya = function () {
   }
 
   function isArguments(values) {
-    return Object.prototype.toString.call(values) === "[object Arguments]"
+    return getType(values) === "[object Arguments]"
   }
 
-  function isArray(predicate) {
-    if (Object.prototype.toString.call(predicate) === '[object Array]') return true
-    return false
+  function isArray(value) {
+    return getType(value) === "[object Array]";
   }
 
-  function isArrayBuffer(values) {
-    return Object.prototype.toString.call(values) === "[object ArrayBuffer]"
+  function isArrayBuffer(value) {
+    return getType(value) == "[object ArrayBuffer]";
   }
 
   function isArrayLike(value) {
@@ -819,7 +818,7 @@ var wuzejimaya = function () {
   }
 
   function isBoolean(value) {
-    return typeof value === "bollean";
+    return getType(value) === '[object Boolean]';
   }
 
   function isDate(value) {
@@ -939,6 +938,10 @@ var wuzejimaya = function () {
     } else if (isString(predicate)) {
       return property(predicate)
     }
+  }
+
+  function getType(val) {
+    return Object.prototype.toString.call(val)
   }
   
   return {
