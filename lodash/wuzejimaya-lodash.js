@@ -741,7 +741,17 @@ var wuzejimaya = function () {
           copy[i] = args.shift()
         }
       }
-      return func.call(thisArg, ...copy, ... args)
+      return func.call(thisArg, ...copy, ...args)
+    }
+  }
+
+  function curry(func, arity = func.length) {
+    return function (...args) {
+      if (args.length < arity) {
+        return curry(func.bind(null, ...args), arity - args.length)
+      } else {
+        return func(...args)
+      }
     }
   }
 
@@ -842,7 +852,7 @@ var wuzejimaya = function () {
     if (value !== value && other !== other) return true
     let typeValue = getType(value), typeOther = getType(other)
     if (typeValue != typeOther) return false 
-    if (typeof value != 'object') return a === b
+    if (typeof value != 'object') return value === other
     if (isArray(value)) {
       if (value.length != other.length) {
         return false
@@ -856,7 +866,7 @@ var wuzejimaya = function () {
       }
     } else {
       let keysValue = Object.keys(value), keysOther = Object.keys(other)
-      let keys = Array.from(new Set(keysValue.concat(keysOther)))//a和b的属性合并去重，避免重复对比
+      let keys = Array.from(new Set(keysValue.concat(keysOther)))//value和other的属性合并去重，避免重复对比
         if (keys.length != keysValue.length) {
           return false
         } else {
@@ -1087,6 +1097,15 @@ var wuzejimaya = function () {
     return res
   }
 
+  function mean(array) {
+    return array.reduce((result, it, idx) => (result * idx + it) / (idx + 1))
+  }
+
+  function meanBy(array, iteratee) {
+    iteratee = _iteratee(iteratee)
+    return array.reduce((result, it, idx) => (result * idx + iteratee(it)) / (idx + 1), 0)
+  }
+
   function min(array) {
     if (!array.length) return undefined
     return array.reduce((res, it) => Math.min(res, it), Infinity)
@@ -1104,6 +1123,18 @@ var wuzejimaya = function () {
     return res
   }
 
+  function multiply(multiplier, multiplicand) {
+    return multiplier * multiplicand
+  }
+
+  function round(number, precision = 0) {
+    return Math.round(number * (10 ** precision)) / (10 ** precision)
+  }
+
+  function subtract(minuend, subtrahend) {
+    return minuend - subtrahend
+  }
+
   function sum(array) {
     return array.reduce((sum, it) => sum + it, 0)
   }
@@ -1111,6 +1142,79 @@ var wuzejimaya = function () {
   function sumBy(array, iteratee) {
     iteratee = _iteratee(iteratee)
     return array.reduce((sum, it) => sum + iteratee(it), 0)
+  }
+
+  function clamp(number, lower, upper) {
+    if (number < lower) return lower
+    if (number > upper) return upper
+    return number
+  }
+
+  function inRange(number, start, end = 0) {
+    if (start > end) [start, end] = [end, start]
+    return number >= start && number < end
+  }
+
+  function random(upper = 1, lower = 0, floating) {
+    if (lower > upper) [lower, upper] = [upper, lower]
+    if (isFloat(lower) || isFloat(upper) || arguments[arguments.length - 1] === true) {
+      return lower + Math.random() * (upper - lower)
+    } else {
+      return lower + (Math.random() * (upper - lower) | 0)
+    }
+  }
+
+  function isFloat(value) {
+    return isNumber(value) && Number.parseInt(value) !== value
+  }
+
+  function assignIn(object, ...sources) {
+    sources.forEach(obj => {
+      for (let key in obj) {
+          object[key] = obj[key]
+      }
+    })
+    return object
+  }
+
+  function defaults(object, ...sources) {
+    sources.forEach(obj => {
+      for (let key in obj) {
+        if (!object[key]) object[key] = obj[key]
+      }
+    })
+    return object
+  }
+
+  function defaultsDeep(object, ...sources) {
+    sources.forEach(obj => {
+      for (let key in obj) {
+        if (!object[key]) {
+          object[key] = obj[key]
+        } else {
+          if (isObject(object[key]) && isObject(obj[key])) {
+            defaultsDeep(object[key], obj[key])
+          }
+        }
+      }
+    })
+    return object
+  }
+
+  function findKey(object, predicate) {
+    predicate = _iteratee(predicate)
+    for (let key in object) {
+      if (predicate(object[key])) {
+        return key
+      }
+    }
+  }
+
+  function findLastKey(object, predicate) {
+    predicate = _iteratee(predicate)
+    for (let key of Object.keys(object).reverse()) {
+        if (predicate(object[key])) return key
+    }
   }
 
   function get(object, path, defaultValue) {
@@ -1300,9 +1404,22 @@ var wuzejimaya = function () {
     floor,
     max,
     maxBy,
+    mean,
+    meanBy,
     min,
     minBy,
+    multiply,
+    round,
+    subtract,
     sum,
     sumBy,
+    clamp,
+    inRange,
+    random,
+    assignIn,
+    defaults,
+    defaultsDeep,
+    findKey,
+    findLastKey,
   }
 }()
