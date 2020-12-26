@@ -1,5 +1,11 @@
 var wuzejimaya = function () {
 
+  const TypedArray = [
+    "Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array",
+    "Uint16Array", "Int32Array", "Uint32Array", "Float32Array",
+    "Float64Array",
+  ]
+
   function chunk(array, size = 1) {
     let res = []
     for (let i = 0; i < array.length;) {
@@ -837,7 +843,7 @@ var wuzejimaya = function () {
 
   function isElement(value) {
     let regexp = /^\[object HTML\w+\]$/;
-    return regexp.test(Object.prototype.toString.call(value));
+    return regexp.test(getType(value));
   }
 
   function isEmpty(value) {
@@ -951,6 +957,10 @@ var wuzejimaya = function () {
     return value !== value
   }
 
+  function isNative(value) {
+    return /\[native code\]/.test('' + value)
+  }
+
   function isNil(value) {
     return value == null
   }
@@ -996,6 +1006,11 @@ var wuzejimaya = function () {
 
   function isSymbol(value) {
     return getType(value) == "[object Symbol]"
+  }
+
+  function isTypedArray(value) {
+    let match = getType(value).match(/\b\w+(?=])/)
+    return TypedArray.includes(match[0])
   }
 
   function isUndefined(value) {
@@ -1177,6 +1192,15 @@ var wuzejimaya = function () {
     return object
   }
 
+  function at(object, paths) {
+    let res = []
+    paths = paths.map(path => toPath(path))
+    paths.forEach(path => {
+      res.push(path.reduce((result, key) => result[key], object)) 
+    })
+    return res
+  }
+
   function defaults(object, ...sources) {
     sources.forEach(obj => {
       for (let key in obj) {
@@ -1217,6 +1241,8 @@ var wuzejimaya = function () {
     }
   }
 
+
+
   function get(object, path, defaultValue) {
     let names = path.split('.')
     for (let name of names) {
@@ -1239,6 +1265,10 @@ var wuzejimaya = function () {
 
   function property(path) {
     return bind(get, null, window, path, undefined)
+  }
+
+  function toPath(value) {
+    return value.match(/\w/g)
   }
 
   function _isObject(predicate) {
@@ -1375,6 +1405,7 @@ var wuzejimaya = function () {
     isMatch,
     isMatchWith,
     isNaN,
+    isNative,
     isNil,
     isNull,
     isNumber,
@@ -1386,6 +1417,7 @@ var wuzejimaya = function () {
     isSet,
     isString,
     isSymbol,
+    isTypedArray,
     isUndefined,
     isWeakMap,
     isWeakSet,
@@ -1397,6 +1429,7 @@ var wuzejimaya = function () {
     toLength,
     toNumber,
     assign,
+    at,
     toSafeInteger,
     add,
     ceil,
