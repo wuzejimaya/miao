@@ -433,17 +433,21 @@ var wuzejimaya = function () {
   }
 
   function zipObjectDeep(props = [], values = []) {
-    let array = []
-    props.forEach((it, idx) => {
-      let tem = {}
-      tem[it[it.length - 1]] = values[idx]
-      array.push(tem)
-    })
-    let path = props[0].split('.')
-    for (let i = path.length - 2; i >= 0; i--) {
-      var res = {}
-      res[path[i][0]] = array
-      array = res
+    let res = {}
+    props = props.map(it => toPath(it))
+    for (let i = 0; i < props.length; i++) {
+      let path = props[i], cur = res
+      for (let j = 0; j < path.length; j++) {
+        if (j === path.length - 1) {
+          cur[path[j]] = values[i]
+          break
+        }
+        if (cur[path[j]] === undefined) {
+          if (/\d/.test(path[j + 1])) cur[path[j]] = []
+          else cur[path[j]] = {}
+        }
+        cur = cur[path[j]]
+      }
     }
     return res
   }
@@ -1241,17 +1245,226 @@ var wuzejimaya = function () {
     }
   }
 
+  function forIn(object, iteratee) {
+    for (let key in object) {
+      if (iteratee(object[key], key, object) === false) break
+    }
+    return object
+  }
 
+  function forInRight(object, iteratee) {
+    let tem = []
+    for (let key in object) {
+      tem.push(key)
+    }
+    tem.reverse()
+    for (let key of tem) {
+      if (iteratee(object[key], key, object) === false) break
+    }
+    return object
+  }
+
+  function forOwn(object, iteratee) {
+    let ownKeys = Object.keys(object)
+    for (let key of ownKeys) {
+      if (iteratee(object[key], key, object) === false) break
+    }
+    return object
+  }
+  
+  function forOwnRight(object, iteratee) {
+    let ownKeys = Object.keys(object)
+    ownKeys.reverse()
+    for (let key of ownKeys) {
+      if (iteratee(object[key], key, object) === false) break
+    }
+    return object
+  }
+
+  function functions(object) {
+    let keys = Object.keys(object)
+    let res = []
+    for (let key of keys) {
+      if (isFunction(object[key]))
+        res.push(key)
+    }
+    return res
+  }
+
+  function functionsIn(object) {
+    let res = []
+    for (let key in object) {
+      if (isFunction(object[key]))
+        res.push(key)
+    }
+    return res
+  }
 
   function get(object, path, defaultValue) {
-    let names = path.split('.')
-    for (let name of names) {
-      if (name in Object(object)) {
-        object = object[name]
+    if (isString(path)) path = toPath(path)
+    for (let key of path) {
+      if (key in Object(object)) {
+        object = object[key]
       } else {
         return defaultValue
       }
     }
+    return object
+  }
+
+  function has(object, path) {
+    if (isString(path)) path = toPath(path)
+    for (let item of path) {
+      if (!object.hasOwnProperty(item)) return false
+      object = object[item]
+    }
+    return true
+  }
+
+  function hasIn(object, path) {
+    if (isString(path)) path = toPath(path)
+    for (let item of path) {
+      if (item in object) object = object[item]
+      else return false
+    }
+    return true
+  }
+
+  function invert(object) {
+    let res = {}
+    for (let key in object) {
+      res[object[key]] = key
+    }
+    return res
+  }
+
+  function invertBy(object, iteratee = it => it) {
+    let res = {}
+    for (let key in object) {
+      let value = iteratee(object[key])
+      if (res[value]) res[value].push(key)
+      else res[value] = [key]
+    }
+    return res
+  }
+
+  function invoke(object, path, ...args) {
+    if (isString(path)) path = toPath(path)
+    let f = path.pop()
+    return get(object, path)[f](...args)
+  }
+
+  function keys(object) {
+    return Object.keys(object)
+  }
+
+  function keysIn(object) {
+    let res = []
+    for (let key in object) {
+      res.push(key)
+    }
+    return res
+  }
+
+  function mapKeys(object, iteratee = it => it) {
+    let res = {}
+    let keys = Object.keys(object)
+    for (let key of keys) {
+      res[iteratee(object[key], key, object)] = object[key]
+    }
+    return res
+  }
+
+  function mapValues(object, iteratee) {
+    iteratee = _iteratee(iteratee)
+    let res = {}
+    let keys = Object.keys(object)
+    for (let key of keys) {
+      res[key] = iteratee(object[key], key, object)
+    }
+    return res
+  }
+
+  function merge(object, ...sources) {
+    sources.forEach(other => {
+      for (let key in other) {
+        if (typeof other[key] === 'object') {
+          if (key in object) merge(object[key], other[key])
+          else object[key] = other[key]
+        } else if (other[key] != undefined){
+          object[key] = other[key]
+        }
+      }
+    })
+    return object
+  }
+
+  function mergeWith(object, ...sources) {
+    if (!isFunction(sources[sources.length - 1])) return merge(object, ...source)
+    let customizer = sources.pop()
+    sources.forEach((it) => {
+      for (let key in it) {
+        object[key] = customizer(object[key], it[key], key, object, it, [])
+      }
+    })
+    return object
+  }
+
+  function omit(object, ...paths) {
+    paths = flattenDeep(paths)
+    paths.forEach(path => {
+      if (isString(path)) path = toPath(path)
+      let deleteKey = path.pop()
+      delete get(object, path)[deleteKey]
+    })
+    return object
+  }
+
+  function omitBy(object, predicate) {
+    let res = {}
+    for (let key in object) {
+      if (!predicate(object[key], key))
+        res[key] = object[key]
+    }
+    return res
+  }
+
+  function pick(object, ...paths) {
+    paths = flattenDeep(paths)
+    let res = {}
+    for (let key of paths)
+      if (object[key]) res[key] = object[key]
+    return res
+  }
+
+  function pickBy(object, predicate) {
+    let res = {}
+    for (let key in object)
+      if (predicate(object[key])) res[key] = object[key]
+    return res
+  }
+
+  function result(object, path, defaultValue) {
+    let value = get(object, path, defaultValue)
+    if (isFunction(value)) return value()
+    return value
+  }
+
+  function set(object, path, value) {
+    if (isString(path)) path = toPath(path)
+    let cur = object
+    path.forEach((key, idx) => {
+      if (idx == path.length - 1) cur[key] = value
+      if (cur[key]) {
+        if (/\d+/.test(path[idx + 1]) && isObject(cur[key])) cur[key] = []
+        else if (/[^\d]+/.test(path[idx + 1]) && isArray(cur[key])) cur[key] = {}
+        cur = cur[key]
+      } else {
+        if (/\d+/.test(path[idx + 1])) cur[key] = []
+        else cur[key] = {}
+        cur = cur[key]
+      }
+    })
     return object
   }
 
@@ -1268,7 +1481,7 @@ var wuzejimaya = function () {
   }
 
   function toPath(value) {
-    return value.match(/\w/g)
+    return value.match(/\w+/g)
   }
 
   function _isObject(predicate) {
@@ -1454,5 +1667,29 @@ var wuzejimaya = function () {
     defaultsDeep,
     findKey,
     findLastKey,
+    forIn,
+    forInRight,
+    forOwn,
+    forOwnRight,
+    functions,
+    functionsIn,
+    get,
+    has,
+    hasIn,
+    invert,
+    invertBy,
+    invoke,
+    keys,
+    keysIn,
+    mapKeys,
+    mapValues,
+    merge,
+    mergeWith,
+    omit,
+    omitBy,
+    pick,
+    pickBy,
+    result,
+    set,
   }
 }()
