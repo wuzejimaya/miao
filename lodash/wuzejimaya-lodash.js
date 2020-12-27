@@ -1332,7 +1332,8 @@ var wuzejimaya = function () {
 
   function invert(object) {
     let res = {}
-    for (let key in object) {
+    let keys = Object.keys(object)
+    for (let key of keys) {
       res[object[key]] = key
     }
     return res
@@ -1340,7 +1341,8 @@ var wuzejimaya = function () {
 
   function invertBy(object, iteratee = it => it) {
     let res = {}
-    for (let key in object) {
+    let keys = Object.keys(object)
+    for (let key of keys) {
       let value = iteratee(object[key])
       if (res[value]) res[value].push(key)
       else res[value] = [key]
@@ -1404,6 +1406,7 @@ var wuzejimaya = function () {
     let customizer = sources.pop()
     sources.forEach((it) => {
       for (let key in it) {
+        if (it[key] == undefined) continue
         object[key] = customizer(object[key], it[key], key, object, it, [])
       }
     })
@@ -1412,12 +1415,13 @@ var wuzejimaya = function () {
 
   function omit(object, ...paths) {
     paths = flattenDeep(paths)
-    paths.forEach(path => {
-      if (isString(path)) path = toPath(path)
-      let deleteKey = path.pop()
-      delete get(object, path)[deleteKey]
-    })
-    return object
+    let res = {}
+    for (let key in object) {
+        if (!paths.includes(key)) {
+            res[key] = object[key]
+        }
+    }
+    return res
   }
 
   function omitBy(object, predicate) {
@@ -1456,8 +1460,6 @@ var wuzejimaya = function () {
     path.forEach((key, idx) => {
       if (idx == path.length - 1) cur[key] = value
       if (cur[key]) {
-        if (/\d+/.test(path[idx + 1]) && isObject(cur[key])) cur[key] = []
-        else if (/[^\d]+/.test(path[idx + 1]) && isArray(cur[key])) cur[key] = {}
         cur = cur[key]
       } else {
         if (/\d+/.test(path[idx + 1])) cur[key] = []
@@ -1466,6 +1468,114 @@ var wuzejimaya = function () {
       }
     })
     return object
+  }
+
+  function setWith(object, path, value, customizer) {
+    if (customizer === undefined) return set(object, path, value)
+    if (isString(path)) path = toPath(path)
+    let cur = object
+    path.forEach((key, idx) => {
+      if (idx == path.length - 1) cur[key] = value
+      cur[key] = customizer(cur[key], key, cur)
+      cur = cur[key]
+    })
+    return object
+  }
+
+  function toPairs(object) {
+    if (isSet(object) || isMap(object)) return object.entries()
+    return keys(object).map(key => [key, object[key]])
+  }
+
+  function toPairsIn(object) {
+    if (isSet(object) || isMap(object)) return object.entries()
+    return keysIn(object).map(key => [key, object[key]])
+  }
+
+  function transform(object, iteratee, accumulator) {
+    let keys = Object.keys(object)
+    if (accumulator === undefined && isArray(object)) accumulator = [] 
+    if (accumulator === undefined && isObject(object)) accumulator = {} 
+    for (let key of keys) {
+      if (iteratee(accumulator, object[key], key, object) === false) break
+    }
+    return accumulator
+  }
+
+  function unset(object, path) {
+    if (isString(path)) path = toPath(path)
+    let deleteKey = path.pop(), cur = object
+    for (let i = 0; i < path.length; i++) {
+      if (!cur[path[i]]) return false
+      cur = cur[path[i]]
+    }
+    if (cur[deleteKey]) {
+      delete cur[deleteKey]
+      return true
+    }
+    return false
+  }
+
+  function update(object, path, updater) {
+    if (isString(path)) path = toPath(path)
+    let cur = object
+    try {
+      path.forEach((key, idx) => {
+        if (idx == path.length - 1) {
+          cur[key] = updater(cur[key])
+          throw new Error("")
+        } 
+        if (cur[key]) {
+          cur = cur[key]
+        } else {
+          if (/\d+/.test(path[idx + 1])) cur[key] = []
+          else cur[key] = {}
+          cur = cur[key]
+        }
+      })
+    } finally {
+      return object
+    }
+  }
+
+  function updateWith(object, path, updater, customizer) {
+    if (customizer === undefined) return update(object, path, updater)
+    if (isString(path)) path = toPath(path)
+    let cur = object
+    path.forEach((key, idx) => {
+      if (idx == path.length - 1) cur[key] = updater() 
+      cur[key] = customizer(cur[key], key, object)
+      cur = cur[key]
+    })
+    return object
+  }
+
+  function values(object) {
+    return Object.keys(object).map(key => object[key])
+  }
+  
+  function valuesIn(object) {
+    return keysIn(object).map(key => object[key])
+  }
+
+  function camelCase(string = '') {
+    return string.toLowerCase()
+      .replace(/(?<=( |-|_))[a-z]/g, str => str.toUpperCase())
+      .replace(/[ \-_]+/g, '')
+      .replace(/^\w/, str => str.toLowerCase())
+  }
+
+  function capitalize(string = '') {
+    return string.toLowerCase()
+        .replace(/^\w/, str => str.toUpperCase())
+  }
+
+  function endsWith(string = '', target, position = string.length) {
+    return string.slice(position - target.length, position) === target
+  }
+
+  function toPath(value) {
+    return value.match(/\w+/g)
   }
 
   function matches(source) {
@@ -1478,10 +1588,6 @@ var wuzejimaya = function () {
 
   function property(path) {
     return bind(get, null, window, path, undefined)
-  }
-
-  function toPath(value) {
-    return value.match(/\w+/g)
   }
 
   function _isObject(predicate) {
@@ -1691,5 +1797,17 @@ var wuzejimaya = function () {
     pickBy,
     result,
     set,
+    setWith,
+    toPairs,
+    toPairsIn,
+    transform,
+    unset,
+    update,
+    updateWith,
+    values,
+    valuesIn,
+    camelCase,
+    capitalize,
+    endsWith
   }
 }()
