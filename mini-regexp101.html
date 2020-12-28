@@ -1,0 +1,56 @@
+<style>
+  em {
+    font-style: normal;
+  }
+  em:nth-of-type(odd) {
+    background-color: #c6e3ff;
+  }
+  em:nth-of-type(even) {
+    background-color: #74c4ff;
+  }
+
+</style>
+正则表达式：<br><input type="text" value="foo" id="reInput">
+<input type="checkbox" id="flagGlobal">g
+<input type="checkbox" id="flagMultiline">m
+<input type="checkbox" id="flagInsensitive">i
+<br>
+测试字符串： <button onclick="run()">Run</button><br>
+<textarea id="strInput" cols="30" rows="10">abfoocdefoobafoofoorbazfoobacc</textarea>
+<br>
+结果：<br>
+<div id="resultDiv"></div>
+
+<script>
+  function run() {
+    var reString = reInput.value
+    var str = strInput.value
+    try {
+      let options = ''
+      if (flagGlobal.checked) options += 'g'
+      if (flagMultiline.checked) options += 'm'
+      if (flagInsensitive.checked) options += 'i'
+      var re = new RegExp(reString, options)
+    } catch(e) {
+      resultDiv.innerHTML = e
+      return
+    }
+    var match
+    var result = ''
+    var prevLastIndex = 0
+    while (match = re.exec(str)) {
+      result += str.slice(prevLastIndex, match.index)
+      if (re.lastIndex == match.index) {
+        result += '<em data-start-idx="' + match.index + '" data-end-idx="' + (match.index + match[0].length) + '">' + '&nbsp;' + '</em>'
+        prevLastIndex = re.lastIndex
+        re.lastIndex++
+      } else {
+        result += '<em data-start-idx="' + match.index + '" data-end-idx="' + (match.index + match[0].length) + '">' + match[0] + '</em>'
+        prevLastIndex = re.lastIndex
+      }
+      if (!flagGlobal.checked) break
+    }
+    result += str.slice(prevLastIndex)
+    resultDiv.innerHTML = result
+  }
+</script>

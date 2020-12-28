@@ -1406,7 +1406,6 @@ var wuzejimaya = function () {
     let customizer = sources.pop()
     sources.forEach((it) => {
       for (let key in it) {
-        if (it[key] == undefined) continue
         object[key] = customizer(object[key], it[key], key, object, it, [])
       }
     })
@@ -1560,18 +1559,191 @@ var wuzejimaya = function () {
 
   function camelCase(string = '') {
     return string.toLowerCase()
-      .replace(/(?<=( |-|_))[a-z]/g, str => str.toUpperCase())
-      .replace(/[ \-_]+/g, '')
-      .replace(/^\w/, str => str.toLowerCase())
+      .replace(/(?<=( |-|_))[a-z]/g, match => match.toUpperCase())
+      .replace(/[\s\-_]+/g, '')
+      .replace(/^\w/, match => match.toLowerCase())
   }
 
   function capitalize(string = '') {
     return string.toLowerCase()
-        .replace(/^\w/, str => str.toUpperCase())
+        .replace(/^\w/, match => match.toUpperCase())
   }
 
   function endsWith(string = '', target, position = string.length) {
     return string.slice(position - target.length, position) === target
+  }
+
+  function escape(string = "") {
+    return string.replace(/[\&\>\<\"\']/g, match => {
+        switch (match) {
+            case "&":
+                return '&amp;'
+            case '"':
+                return '&quot'
+            case "'":
+                return '&apos;'
+            case '<':
+                return '&lt;'
+            case '>':
+                return '&gt'
+            default:
+                return match
+        }
+    })
+  }
+
+  function escapeRegExp(string = "") {
+    return string.replace(/[\^\$\.\*\+\?\(\)\[\]\,\|]/g, match => `\\${match}`)
+  }
+
+  function kebabCase(string = '') {
+    return string.match(/[a-z]+|[A-Z][a-z]+|[A-Z]+/g).join('-').toLowerCase()
+  }
+
+  function lowerCase(string = '') {
+    return string.match(/[a-z]+|[A-Z][a-z]+|[A-Z]+/g).join(' ').toLowerCase()
+  }
+
+  function lowerFirst(string = '') {
+    return string.replace(/^\w/, match => match.toLowerCase())
+  }
+
+  function pad(string = '', length = 0, chars = ' ') {
+    if (string.length >= length) return string
+    let leftLength = (length - string.length) >> 1
+    let rightLength = length - string.length - leftLength
+    string = string.padStart(leftLength + string.length, chars)
+    string = string.padEnd(rightLength + string.length, chars)
+    return string 
+  }
+
+  function padEnd(string = '', length = 0, chars = ' ') {
+    return string.padEnd(length, chars)    
+  }
+  
+  function padStart(string = '', length = 0, chars = ' ') {
+    return string.padStart(length, chars)    
+  }
+
+  function parseInt(string, radix = 10) {
+    return Number.parseInt(string, radix)
+  }
+
+  function repeat(string = '', n = 1) {
+    return string.repeat(n)
+  }
+
+  function replace(string = '', pattern, replacement) {
+    return string.replace(pattern, replacement)
+  }
+
+  function snakeCase(string = '') {
+    return string.match(/[a-z]+|[A-Z][a-z]+|[A-Z]+/g).join('_').toLowerCase()
+  }
+
+  function split(string = '', separator, limit) {
+    return string.split(separator).slice(0, limit)
+  }
+
+  function startCase(string = '') {
+    return string.match(/[a-z]+|[A-Z][a-z]+|[A-Z]+/g)
+      .map(it => it.replace(/^\w/, match => match.toUpperCase()))
+      .join(' ')
+  }
+
+  function startsWith(string = '', target, position = 0) {
+    for (let i = 0; i < target.length; i++) {
+      if (target[i] != string[position + i]) return false
+    }
+    return true
+  }
+
+  function toLower(string = '') {
+    return string.toLowerCase()
+  }
+  
+  function toUpper(string = '') {
+    return string.toUpperCase()
+  }
+
+  function trim(string = '', chars = '\\s') {
+    return trimEnd(trimStart(string, chars), chars)
+  }
+
+  function trimEnd(string = '', chars = '\\s') {
+    let reg = new RegExp('[' + chars + ']+$')
+    return string.replace(reg, '')
+  }
+  
+  function trimStart(string = '', chars = '\\s') {
+    let reg = new RegExp('^[' + chars + ']+')
+    return string.replace(reg, '')
+  }
+
+  function truncate(string = '', options = {}) {
+    if (arguments.length === 1) {
+      if (string.length <= 30) return string
+      return string.slice(0, 30).replace(/.{3}$/, '...')
+    }
+    let length = options.length ? options.length : 30
+    let omission = options.omission ? options.omission : '...'
+    let separator = options.separator
+    string = string.slice(0, length)
+    if (separator) {
+      separator = new RegExp(separator, 'g')
+      let match, index
+      while (match = separator.exec(string)) {
+        index = match.index
+      }
+      if (index) {
+        return string.slice(0, index).concat(omission)
+      } else {
+        return string.slice(0, length - omission.length).concat(omission)
+      }
+    } else {
+      return string.slice(0, length - omission.length).concat(omission)
+    }
+  }
+
+  function unescape(string = "") {
+    return string.replace(
+        /(&amp;)|(&lt;)|(&gt;)|(&quot;)|(&#39;)|(&#96;)/g,
+        (match) => {
+            switch (match) {
+                case "&amp;":
+                    return "&"
+                case "&lt;":
+                    return "<"
+                case "&gt;":
+                    return ">"
+                case "&quot;":
+                    return '"'
+                case "&#39;":
+                    return "'"
+                case "&#96;":
+                    return "`"
+                default:
+                    return match
+            }
+        }
+    )
+  }
+
+  function upperCase(string = '') {
+    return string.match(/[a-z]+|[A-Z][a-z]+|[A-Z]+/g).join(' ').toUpperCase()
+  }
+
+  function upperFirst(string = '') {
+    return string.replace(/^\w/, match => match.toUpperCase())
+  }
+
+  function words(string = '', pattern = /\w+/g) {
+    return string.match(pattern)
+  }
+
+  function defaultTo(value, defaultValue) {
+    if (value != value || value == undefined) return defaultValue
+    return value
   }
 
   function toPath(value) {
@@ -1808,6 +1980,32 @@ var wuzejimaya = function () {
     valuesIn,
     camelCase,
     capitalize,
-    endsWith
+    endsWith,
+    escape,
+    escapeRegExp,
+    kebabCase,
+    lowerCase,
+    lowerFirst,
+    pad,
+    padEnd,
+    padStart,
+    parseInt,
+    repeat,
+    replace,
+    snakeCase,
+    split,
+    startCase,
+    startsWith,
+    toLower,
+    toUpper,
+    trim,
+    trimEnd,
+    trimStart,
+    truncate,
+    unescape,
+    upperCase,
+    upperFirst,
+    words,
+    defaultTo,
   }
 }()
