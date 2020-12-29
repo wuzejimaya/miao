@@ -22,6 +22,15 @@ var wuzejimaya = function () {
     return array.filter(it => it)
   }
 
+  function concat(array, ...values) {
+    let res = [...array]
+    for (let i = 0; i < values.length; i++) {
+      if (isArray(values[i])) res.push(...values[i])
+      else res.push(values[i])
+    }
+    return res
+  }
+
   function difference(array, ...values) {
     let diff = [].concat(...values)
     return array.filter(e => !diff.includes(e))
@@ -217,6 +226,14 @@ var wuzejimaya = function () {
 
   function pullAllWith(array, values, comparator) {
     return array.filter(obj => values.every(value => !comparator(value, obj)))
+  }
+
+  function pullAt(array, indexes) {
+    let res = []
+    indexes.forEach(it => res.push(array[it]))
+    array.lenght = 0
+    array.push(...array.filter((_, idx) => !indexes.includes(idx)))
+    return res
   }
 
   function reverse(array) {
@@ -727,7 +744,7 @@ var wuzejimaya = function () {
 
   function ary(func, n = func.length) {
     return function (...args) {
-        return func(args.slice(0, n))
+        return func(...args.slice(0, n))
     }
   }
   
@@ -781,9 +798,41 @@ var wuzejimaya = function () {
     }
   }
 
+  function memoize(func, resolver) {
+    let map = new Map()
+    return function(args) {
+        let value = map.get(args)
+        if (value) {
+          return value
+        } else {
+          let res = func.call(this, args)
+          map.set(args, res)
+          return res
+        }
+    }
+  }
+
   function negate(predicate) {
     return function (...args) {
       return !predicate(...args)
+    }
+  }
+
+  function once(func) {
+    return function(...args) {
+        return func.bind(null, ...args)
+    }
+  }
+
+  function spread(func, start = 0) {
+    return function (arg) {
+      return func(...arg.slice(start))
+    }
+  }
+
+  function unary(func) {
+    return function (arg) {
+      return func(arg)
     }
   }
 
@@ -791,6 +840,24 @@ var wuzejimaya = function () {
     if (isArray(value)) return value
     if (arguments.length == 0) return []
     return [value]
+  }
+
+  function cloneDeep(value) {
+    if (isArray(value)) {
+      let res = []
+      for (let i = 0; i < value.length; i++) {
+        res.push(cloneDeep(value[i]))
+      }
+      return res
+    } else if (_isObject(value)) {
+      let res = {}, keys = Object.keys(value)
+      for (let key of keys) {
+        res[key] = cloneDeep(value[key])
+      }
+      return res
+    } else {
+      return value
+    }
   }
 
   function conformsTo(object, source) {
@@ -1559,7 +1626,7 @@ var wuzejimaya = function () {
 
   function camelCase(string = '') {
     return string.toLowerCase()
-      .replace(/(?<=( |-|_))[a-z]/g, match => match.toUpperCase())
+      .replace(/(?<=(\s|-|_))[a-z]/g, match => match.toUpperCase())
       .replace(/[\s\-_]+/g, '')
       .replace(/^\w/, match => match.toLowerCase())
   }
@@ -1741,25 +1808,116 @@ var wuzejimaya = function () {
     return string.match(pattern)
   }
 
+  function conforms(source) {
+    return function (obj) {
+      let keys = Object.keys(source)
+      for (let key of keys) {
+        if (!source[key](obj[key])) return false
+      }
+      return true 
+    }
+  }
+
+  function constant(value) {
+    return function() {
+      return value
+    }
+  }
+
   function defaultTo(value, defaultValue) {
     if (value != value || value == undefined) return defaultValue
     return value
   }
 
-  function toPath(value) {
-    return value.match(/\w+/g)
+  function flow(funcs) {
+    let cache 
+    return function (...args) {
+      for (let i = 0; i < funcs.length; i++) {
+        if (cache) cache = funcs[i](cache)
+        else cache = funcs[i](...args)
+      }
+      return cache
+    }
+  }
+
+  function identity(value) {
+    return value
   }
 
   function matches(source) {
     return bind(isMatch, null, window, source)
   }
 
-  function matchesProperty(array) {
-    return obj => obj[array[0]] == array[1]
+  function method(path, ...args) {
+    return function (obj) {
+      return get(obj, path).apply(null, args)
+    }
+  }
+
+  function methodOf(object, ...args) {
+    return function (path) {
+      return get(object, path).apply(null, args)
+    }
+  }
+
+  function nthArg(n = 0) {
+    return function (...args) {
+      return args[n]
+    }
   }
 
   function property(path) {
     return bind(get, null, window, path, undefined)
+  }
+
+  function propertyOf(object) {
+    return bind(get, null, object, window, undefined)
+  }
+
+  function range(start = 0, end, step = 1) {
+    if (arguments.length == 0) return []
+    if (arguments.length == 1) [end, start] = [start, 0]
+    if (arguments.length < 3 && end < 0) step = -1
+    let res = []
+    if (step == 0) {
+      for (let i = start; i < end; i++) 
+        res.push(start)
+    } else if (start > end) {
+      for (let i = start; i > end; i += step)
+        res.push(i)
+    } else {
+      for (let i = start; i < end; i += step)
+        res.push(i)
+    }
+    return res
+  }
+
+  function rangeRight(start = 0, end, step = 1) {
+    if (arguments.length == 0) return []
+    if (arguments.length == 1) return range(start).reverse()
+    if (arguments.length == 2) return range(start, end, 1).reverse()
+    return range(start, end, step).reverse()
+  }
+
+  function times(n, iteratee) {
+    let res = []
+    for (let i = 0; i < n; i++) {
+      res.push(iteratee(i))
+    }
+    return res
+  }
+
+  function toPath(value) {
+    return value.match(/\w+/g)
+  }
+  
+  let id = 0
+  function uniqueId(prefix = "") {
+    return prefix + (++id)
+  }
+
+  function matchesProperty(array) {
+    return obj => obj[array[0]] == array[1]
   }
 
   function _isObject(predicate) {
@@ -1781,10 +1939,31 @@ var wuzejimaya = function () {
   function getType(val) {
     return Object.prototype.toString.call(val)
   }
+
+  function stringifyJson(val) {
+    if (Array.isArray(val)) {
+      return '[' + val.map(stringifyJson).join() + ']'
+    }
+    if (typeof val == 'object') {
+      let result = '{'
+      for (let key in val) {
+        result += '"' + key + '":' + stringifyJson(val[key]) + ','
+      }
+      result = result.slice(0, -1)
+      return result += '}'
+    }
+    if (typeof val === 'string') return '"' + val + '"'
+    if (typeof val == 'number') return val + ''
+    if (val === null) return 'null'
+    if (val === undefined) return  'undefined'
+    if (val === false) return 'false'
+    if (val === true) return 'true'
+  }
   
   return {
     chunk,
     compact,
+    concat,
     difference,
     differenceBy,
     differenceWith,
@@ -1813,6 +1992,7 @@ var wuzejimaya = function () {
     pullAll,
     pullAllBy,
     pullAllWith,
+    pullAt,
     reverse,
     sortedIndex,
     sortedIndexBy,
@@ -1869,9 +2049,18 @@ var wuzejimaya = function () {
     size,
     some,
     sortBy,
+    ary,
+    curry,
     defer,
     delay,
+    flip,
+    memoize,
+    negate,
+    once,
+    spread,
+    unary,
     castArray,
+    cloneDeep,
     conformsTo,
     eq,
     gt,
@@ -2006,6 +2195,22 @@ var wuzejimaya = function () {
     upperCase,
     upperFirst,
     words,
+    conforms,
+    constant,
     defaultTo,
+    flow,
+    identity,
+    matches,
+    method,
+    methodOf,
+    nthArg,
+    property,
+    propertyOf,
+    range,
+    rangeRight,
+    times,
+    toPath,
+    uniqueId,
+    stringifyJson
   }
 }()
