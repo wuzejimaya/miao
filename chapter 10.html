@@ -1,0 +1,85 @@
+<script>
+   function test(re, str) {
+    return Boolean(re.exec(str))
+  }
+
+  // str.search(re)
+  function search(str, re) {
+    var oldLastIndex = re.lastIndex
+    re.lastIndex = 0
+    var match = re.exec(str)
+    re.lastIndex = oldLastIndex
+    if (match) {
+      return match.index
+    } else {
+      return -1
+    }
+  }
+
+  // str.match(re)
+  function match(str, re) {
+    if (re.global) {
+      // var oldLastIndex = re.lastIndex
+      re.lastIndex = 0
+      var result = []
+      var match
+      while (match = re.exec(str)) {
+        result.push(match[0])
+      }
+      // re.lastIndex = oldLastIndex
+      return result
+    } else {
+      return re.exec(str)//不带g的时候，根本就不会更新lastIndex属性
+    }
+  }
+
+  // str.split(re)
+  function split(str, re) {
+    if (!re.global) {//不加g标志会让后面的死循环
+      re = new RegExp(re, re.flags + 'g')
+    }
+    re.lastIndex = 0
+    var result = []
+    var match = null
+    var prevLastIndex = 0
+    while (match = re.exec(str)) {
+      result.push(str.slice(prevLastIndex, match.index))
+      result.push(...match.slice(1))
+      prevLastIndex = re.lastIndex
+    }
+    result.push(str.slice(prevLastIndex))
+    return result
+  }
+
+  // str.replace(re: RegExp, replacer: function | replacement: string)
+  function replace(str, re, replacer) {
+    if (typeof replacer == 'string') {
+      // 将字符串形式转化为等价的函数
+      // 'ab$1cd$2ef'  等价于  (_, $1, $2, $3) => 'ab' + $1 + 'cd' + $2 + 'ef'
+      var replacerStr = replacer // 'ab$1cd$2'
+      replacer = function(...args) {
+        var i = 1
+                     //'ab$1cd$2ef'
+        return replace(replacerStr, /\$\d/g, (match) => {
+          return args[i++]
+        })
+      }
+    }
+
+    var result = ''
+    var match = null
+    var prevLastIndex = 0
+    while (match = re.exec(str)) {
+      result += str.slice(prevLastIndex, match.index)
+      result += replacer(...match, match.index, match.input, match.group)
+      prevLastIndex = re.lastIndex
+      if (!re.global) {
+        prevLastIndex = match.index + match[0].length
+        break
+      }
+    }
+    result += str.slice(prevLastIndex)
+    return result
+
+  }
+</script>

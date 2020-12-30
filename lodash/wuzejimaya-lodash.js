@@ -1940,24 +1940,91 @@ var wuzejimaya = function () {
     return Object.prototype.toString.call(val)
   }
 
-  function stringifyJson(val) {
-    if (Array.isArray(val)) {
-      return '[' + val.map(stringifyJson).join() + ']'
-    }
-    if (typeof val == 'object') {
-      let result = '{'
-      for (let key in val) {
-        result += '"' + key + '":' + stringifyJson(val[key]) + ','
+  function parseJson(str) {
+    let match = str.match(/\w+\.?\w*|\[|\]|\{|\}/g)
+    return parse(match)
+    function parse(match) {
+      if (match.length == 1) {
+        if (match[0] == 'true') return true
+        if (match[0] == 'false') return false
+        if (match[0] == 'null') return null
+        if (match[0] == 'undefined') return undefined
+        if (/\d+/.test(match[0])) return Number(match[0])
+        return match[0] 
       }
-      result = result.slice(0, -1)
-      return result += '}'
+      if (match[0] == '{') {
+        let res = {}
+        for (let i = 1; i < match.length - 1;) {
+          if (match[i + 1] == '[') {
+            let index = findParenthesisIndex(match, ']' , i + 2)
+            res[match[i]] = parse(match.slice(i + 1, index + 1))
+            i = index + 1
+          } else if (match[i + 1] == '{') {
+            let index = findParenthesisIndex(match, '}' , i + 2)
+            res[match[i]] = parse(match.slice(i + 1, index + 1))
+            i = index + 1
+          } else {
+            res[match[i]] = parse(match.slice(i + 1, i + 2))
+            i += 2
+          }
+        }
+        return res
+      } else if (match[0] == '[') {
+        let res = []
+        for (let i = 1; i < match.length - 1; i++) {
+          if (match[i] == '[') {
+            let index = findParenthesisIndex(match, ']' , i + 1)
+            res.push(parse(match.slice(i, index + 1)))
+            i = index
+          } else if (match[i] == '{') {
+            let index = findParenthesisIndex(match, '}', i + 1)
+            res.push(parse(match.slice(i, index + 1)))
+            i = index
+          } else {
+            res.push(parse(match.slice(i, i + 1)))
+          }
+        }
+        return res
+      } 
     }
+    function findParenthesisIndex(match, char, start) {
+      if (char == ']') {
+        let stack = ['[']
+        for (let i = start; i < match.length; i++) {
+          if (match[i] == '[') stack.push('[')
+          else if (match[i] == ']') stack.pop()
+          if (stack.length == 0) return i
+        }
+      } else {
+        let stack = ['{']
+        for (let i = start; i < match.length; i++) {
+          if (match[i] == '{') stack.push('{')
+          else if (match[i] == '}') stack.pop()
+          if (stack.length == 0) return i
+        }
+      }
+    }
+  }
+
+  function stringifyJson(val) {
     if (typeof val === 'string') return '"' + val + '"'
     if (typeof val == 'number') return val + ''
     if (val === null) return 'null'
     if (val === undefined) return  'undefined'
     if (val === false) return 'false'
     if (val === true) return 'true'
+    if (Array.isArray(val)) {
+      return '[' + val.map(stringifyJson).join() + ']'
+    }
+    if (typeof val == 'object') {
+      let result = '{'
+      let keys = Object.keys(val)
+      for (let key of keys) {
+        result += '"' + key + '":' + stringifyJson(val[key]) + ','
+      }
+      result = result.slice(0, -1)
+      return result += '}'
+    }
   }
   
   return {
@@ -2211,6 +2278,7 @@ var wuzejimaya = function () {
     times,
     toPath,
     uniqueId,
+    parseJson,
     stringifyJson
   }
 }()

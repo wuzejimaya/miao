@@ -399,6 +399,47 @@
     }
     return res
   }
+  function map (mapper, thisArg = window) {
+    let res = []
+    let arr = Array.from(this)
+    for (let i = 0; i < arr.length; i++) {
+      res.push(mapper.call(thisArg, arr[i], i, arr))
+    }
+    return res
+  }
+  function map (mapper, thisArg = window) {
+    let res = []
+    for (let i = 0; i < this.length; i++) {
+      res.push(mapper.call(thisArg, this[i], i, this))
+    }
+    return res
+  }
+  function concat(initArray, ...values) {
+    let res = []
+    for (let i = 0; i < initArray.length; i++) {
+      res.push(initArray[i])
+    }
+    for (let i = 0; i < values.length; i++) {
+
+    }
+  }
+  function groupBy(array, predicate) {
+    let res = {}
+    for (let i = 0; i < array.length; i++) {
+      let key = predicate(array[i], i, array)
+      if (key in res) {
+
+      }
+    }
+    return res
+  }
+  function heapDown(ary, pos) {
+    while (xx) {
+      let max = Math.max(ary[pos], ary[2 * pos + 1], ary[2 * pos + 2])
+      if (max == ary[pos]) return
+      if (max)
+    }
+  }
 </script>
 </head>
 <body>

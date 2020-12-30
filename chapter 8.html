@@ -41,6 +41,27 @@
     }
 
     /*
+      类似python with语句的高阶函数
+    */
+
+    function With(...args) {//rest parameter
+      var f = args.pop()
+      try {
+        f(...args)
+      } finally {
+        for (var arg of args) {
+          arg.close()
+        }
+      }
+    }
+
+
+    With(open('a.txt'), open('b.txt'), (a, b) => {
+      // do sth with a and b
+    })
+
+
+    /*
       作业：实现describe和it函数，使其能够输出形如macha的log
     */
     function assert(test, msg) {
