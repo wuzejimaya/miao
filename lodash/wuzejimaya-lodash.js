@@ -1941,7 +1941,7 @@ var wuzejimaya = function () {
   }
 
   function parseJson(str) {
-    let match = str.match(/\w+\.?\w*|\[|\]|\{|\}/g)
+    let match = str.match(/"?\w+\.?\w*"?|\[|\]|\{|\}/g)
     return parse(match)
     function parse(match) {
       if (match.length == 1) {
