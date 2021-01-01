@@ -1950,7 +1950,7 @@ var wuzejimaya = function () {
         if (match[0] == 'null') return null
         if (match[0] == 'undefined') return undefined
         if (/\d+/.test(match[0])) return Number(match[0])
-        return match[0] 
+        return match[0].slice(1, -1)
       }
       if (match[0] == '{') {
         let res = {}
