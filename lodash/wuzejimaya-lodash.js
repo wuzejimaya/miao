@@ -1957,14 +1957,14 @@ var wuzejimaya = function () {
         for (let i = 1; i < match.length - 1;) {
           if (match[i + 1] == '[') {
             let index = findParenthesisIndex(match, ']' , i + 2)
-            res[match[i]] = parse(match.slice(i + 1, index + 1))
+            res[match[i].slice(1, -1)] = parse(match.slice(i + 1, index + 1))
             i = index + 1
           } else if (match[i + 1] == '{') {
             let index = findParenthesisIndex(match, '}' , i + 2)
-            res[match[i]] = parse(match.slice(i + 1, index + 1))
+            res[match[i].slice(1, -1)] = parse(match.slice(i + 1, index + 1))
             i = index + 1
           } else {
-            res[match[i]] = parse(match.slice(i + 1, i + 2))
+            res[match[i].slice(1, -1)] = parse(match.slice(i + 1, i + 2))
             i += 2
           }
         }
