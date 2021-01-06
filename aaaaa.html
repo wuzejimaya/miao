@@ -440,6 +440,61 @@
       if (max)
     }
   }
+  /\-?(0|[1-9]\d*)(\.\d+)?((e|E))?/
+  function raw(...args) {
+    let res 
+
+  }
+
+  let n = 3
+  function dfs(current = '', l = 0, r = 0) {
+    if (current.length == 2 * n) {
+      res.push(current)
+      return 
+    }  
+    if (l < n) {
+      dfs(current + '(')
+    }
+    dfs(current + ')')
+  }
+
+  function tokenize(code) {
+    let result = []
+    let token = /\s*(\w+|\+=|\-=|\+|=|\(|\)|\.)\s*/gym
+    let match
+    while (match = token.exec(code)) {
+      result.push(match[1])
+    }
+    return result
+  }
+  let code = `
+  let a = 1
+  let b = 2
+  let c = a + b
+  console.log(c)
+  `
+  class Person {
+    static firstName
+    static lastName
+    constructor(str) {
+        let ary = str.split(' ')
+        this.firstName = ary[0]
+        this.lastName = ary[1]
+    }
+    set fullName(str) {
+        let ary = str.split(' ')
+        this.firstName = ary[0]
+        this.lastName = ary[1]
+    }
+    get fullName() {
+        return this.firstName + ' ' + this.lastName
+    }
+  }
+  class MaxHeap {//数组实现
+    constructor() {
+      this.data = []
+    }
+  }
 </script>
 </head>
 <body>

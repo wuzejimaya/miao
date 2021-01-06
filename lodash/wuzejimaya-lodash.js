@@ -1941,6 +1941,82 @@ var wuzejimaya = function () {
   }
 
   function parseJson(str) {
+    let i = 0
+    return parseValue()
+    function parseValue() {
+      var char = str[i]
+      if (char == '[') return parseArray()
+      if (char == '{') return parseObject()
+      if (char == '"') return parseString()
+      if (char == 't') return parseTrue()
+      if (char == 'f') return parseFalse()
+      if (char == 'n') return parseNull()
+      return parseNumber()
+    }
+
+    function parseArray() {
+      var result = []
+      i++ // skip [
+      while (str[i] != ']') {
+        if (str[i] == ',') {
+          i++ // skip ,
+        }
+        var value = parseValue() // parse a value from i
+        result.push(value)
+      }
+      i++ // skip ']'
+      return result
+    }
+
+    function parseObject() {
+      var result = {}
+      i++ // skip '{'
+      while (str[i] != '}') {
+        if (str[i] == ',') {
+          i++ // skip ,
+        }
+        var key = parseString()
+        i++ // skip ':'
+        var value = parseValue()
+        result[key] = value
+      }
+      i++ // skip '}'
+      return result
+    }
+
+    function parseString() {
+      var result = ''
+      i++ // skip first "
+      while (str[i] !== '"') {
+        result += str[i++]
+      }
+      i++ // skip second "
+      return result
+    }
+
+    function parseTrue() {
+      i += 4
+      return true
+    }
+    function parseFalse() {
+      i += 5
+      return false
+    }
+    function parseNull() {
+      i += 4
+      return null
+    }
+
+    function parseNumber() {
+      var numStr = ''
+      while (/[\d+\-.]/.test(str[i])) {
+        numStr += str[i++]
+      }
+      return parseFloat(numStr)
+    }
+  }
+
+  function _parseJson(str) {
     let match = str.match(/"?\w+\.?\w*"?|\[|\]|\{|\}/g)
     return parse(match)
     function parse(match) {
